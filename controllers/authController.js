@@ -5,7 +5,17 @@ const jwt = require('jsonwebtoken');
 // Đăng ký người dùng mới
 const register = async (req, res) => {
   try {
-    const { name, username, password, email, phone, address } = req.body;
+    const {
+      name,
+      firstName,
+      lastName,
+      username,
+      password,
+      email,
+      phone,
+      address,
+      city
+    } = req.body;
 
     // Validate dữ liệu đầu vào
     if (!name || !username || !email || !password) {
@@ -82,10 +92,24 @@ const register = async (req, res) => {
     const hashedPassword = await bcrypt.hash(password, saltRounds);
 
     // Thêm người dùng mới vào database
+    const first = firstName?.trim() || null;
+    const last = lastName?.trim() || null;
+    const fullName = (name?.trim()) || `${first || ''} ${last || ''}`.trim();
+
     const [result] = await pool.execute(
-      `INSERT INTO nguoi_dung (ho_ten, username, email, mat_khau, so_dien_thoai, vai_tro) 
-       VALUES (?, ?, ?, ?, ?, 'khach_hang')`,
-       [name.trim(), trimmedUsername, email.trim(), hashedPassword, phone ? phone.trim() : null]
+      `INSERT INTO nguoi_dung (ho_ten, first_name, last_name, username, email, mat_khau, so_dien_thoai, dia_chi, thanh_pho, vai_tro) 
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, 'khach_hang')`,
+       [
+        fullName || trimmedUsername,
+        first,
+        last,
+        trimmedUsername,
+        email.trim(),
+        hashedPassword,
+        phone ? phone.trim() : null,
+        address ? address.trim() : null,
+        city ? city.trim() : null
+       ]
     );
 
     res.status(201).json({
@@ -177,9 +201,13 @@ const login = async (req, res) => {
       user: {
         id: user.ma_nguoi_dung,
         name: user.ho_ten,
+        firstName: user.first_name,
+        lastName: user.last_name,
         username: user.username,
         email: user.email,
         phone: user.so_dien_thoai,
+        address: user.dia_chi,
+        city: user.thanh_pho,
         role: user.vai_tro
       },
       // Giữ tương thích với frontend hiện tại
