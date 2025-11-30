@@ -19,14 +19,15 @@ SET time_zone = "+00:00";
 
 --
 -- Database: `shoplen`
---
+  CREATE Database shoplen1;
+  use shoplen1
 
 -- --------------------------------------------------------
 
 --
 -- Table structure for table `bien_the_san_pham`
 --
-
+  
 DROP TABLE IF EXISTS `bien_the_san_pham`;
 CREATE TABLE IF NOT EXISTS `bien_the_san_pham` (
   `ma_bien_the` int NOT NULL AUTO_INCREMENT,
