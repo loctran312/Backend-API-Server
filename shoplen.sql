@@ -1,34 +1,34 @@
--- ph... SQLINES DEMO ***
--- ve... SQLINES DEMO ***
--- SQLINES DEMO *** admin.net/
+-- phpMyAdmin SQL Dump
+-- version 5.2.1
+-- https://www.phpmyadmin.net/
 --
--- SQLINES DEMO *** 306
--- SQLINES DEMO *** Nov 08, 2025 at 11:49 AM
--- SQLINES DEMO *** .1.0
--- PH... SQLINES DEMO ***
+-- Host: 127.0.0.1:3306
+-- Generation Time: Nov 30, 2025 at 11:15 AM
+-- Server version: 9.1.0
+-- PHP Version: 8.3.14
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
 SET time_zone = "+00:00";
 
 
-/* SQLINES DEMO *** CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
-/* SQLINES DEMO *** CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
-/* SQLINES DEMO *** COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/* SQLINES DEMO ***  utf8mb4 */;
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8mb4 */;
 
 --
--- Da... SQLINES DEMO ***
---
+-- Database: `shoplen`
+  CREATE Database shoplen1;
+  use shoplen1
 
--- SQLINES DEMO *** ---------------------------------------
+-- --------------------------------------------------------
 
 --
--- SQLINES DEMO *** or table `bien_the_san_pham`
+-- Table structure for table `bien_the_san_pham`
 --
-
+  
 DROP TABLE IF EXISTS `bien_the_san_pham`;
--- SQLINES FOR EVALUATION USE ONLY (14 DAYS)
 CREATE TABLE IF NOT EXISTS `bien_the_san_pham` (
   `ma_bien_the` int NOT NULL AUTO_INCREMENT,
   `ma_san_pham` int NOT NULL,
@@ -41,15 +41,19 @@ CREATE TABLE IF NOT EXISTS `bien_the_san_pham` (
   KEY `ma_san_pham` (`ma_san_pham`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
+--
+-- Dumping data for table `bien_the_san_pham`
+--
+
 INSERT INTO `bien_the_san_pham` (`ma_bien_the`, `ma_san_pham`, `mau_sac`, `kich_co`, `chat_lieu`, `url_hinh_anh_bien_the`, `gia_them`) VALUES
 (14, 12, 'Hồng Pastel', '100g', 'Milk Cotton', '/uploads/item1-1764433295742-524867427.png', 0.00),
 (15, 12, 'Xanh Pastel', '100g', 'Milk Cotton', '/uploads/collection2-1764433295747-568464108.png', 0.00),
 (16, 13, 'Xanh Pastel', '200g', 'Wool', '/uploads/item5-1764434065626-491115620.png', 0.00);
 
--- SQLINES DEMO *** ---------------------------------------
+-- --------------------------------------------------------
 
 --
--- SQLINES DEMO *** or table `chi_tiet_don_hang`
+-- Table structure for table `chi_tiet_don_hang`
 --
 
 DROP TABLE IF EXISTS `chi_tiet_don_hang`;
@@ -64,12 +68,12 @@ CREATE TABLE IF NOT EXISTS `chi_tiet_don_hang` (
   KEY `ma_don_hang` (`ma_don_hang`),
   KEY `ma_san_pham` (`ma_san_pham`),
   KEY `ma_bien_the` (`ma_bien_the`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- SQLINES DEMO *** ---------------------------------------
+-- --------------------------------------------------------
 
 --
--- SQLINES DEMO *** or table `danh_gia`
+-- Table structure for table `danh_gia`
 --
 
 DROP TABLE IF EXISTS `danh_gia`;
@@ -83,12 +87,12 @@ CREATE TABLE IF NOT EXISTS `danh_gia` (
   PRIMARY KEY (`ma_danh_gia`),
   KEY `ma_san_pham` (`ma_san_pham`),
   KEY `ma_nguoi_dung` (`ma_nguoi_dung`)
-) ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- SQLINES DEMO *** ---------------------------------------
+-- --------------------------------------------------------
 
 --
--- SQLINES DEMO *** or table `danh_muc`
+-- Table structure for table `danh_muc`
 --
 
 DROP TABLE IF EXISTS `danh_muc`;
@@ -99,15 +103,19 @@ CREATE TABLE IF NOT EXISTS `danh_muc` (
   PRIMARY KEY (`ma_danh_muc`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
+--
+-- Dumping data for table `danh_muc`
+--
+
 INSERT INTO `danh_muc` (`ma_danh_muc`, `ten_danh_muc`, `mo_ta`) VALUES
 (1, 'Len', NULL),
 (2, 'Công cụ', NULL),
 (3, 'Workshop', NULL);
 
--- SQLINES DEMO *** ---------------------------------------
+-- --------------------------------------------------------
 
 --
--- SQLINES DEMO *** or table `don_hang`
+-- Table structure for table `don_hang`
 --
 
 DROP TABLE IF EXISTS `don_hang`;
@@ -115,25 +123,25 @@ CREATE TABLE IF NOT EXISTS `don_hang` (
   `ma_don_hang` int NOT NULL AUTO_INCREMENT,
   `ma_nguoi_dung` int DEFAULT NULL,
   `ngay_dat_hang` datetime DEFAULT CURRENT_TIMESTAMP,
-  `trang_thai` varchar(30) check (`trang_thai` in ('cho_xu_ly','da_thanh_toan','dang_giao','hoan_thanh','da_huy')) DEFAULT 'cho_xu_ly',
+  `trang_thai` enum('cho_xu_ly','da_thanh_toan','dang_giao','hoan_thanh','da_huy') DEFAULT 'cho_xu_ly',
   `tong_tien` decimal(10,2) DEFAULT NULL,
   `ghi_chu` text,
   `ma_thanhpho` int DEFAULT NULL,
   `ma_quan` int DEFAULT NULL,
   `ma_phuong` int DEFAULT NULL,
   `dia_chi_giao_hang` varchar(255) DEFAULT NULL,
-  `thoi_gian_cap_nhat` datetime DEFAULT CURRENT_TIMESTAMP /* ON UPDATE CURRENT_TIMESTAMP */,
+  `thoi_gian_cap_nhat` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`ma_don_hang`),
   KEY `ma_nguoi_dung` (`ma_nguoi_dung`),
   KEY `ma_thanhpho` (`ma_thanhpho`),
   KEY `ma_quan` (`ma_quan`),
   KEY `ma_phuong` (`ma_phuong`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- SQLINES DEMO *** ---------------------------------------
+-- --------------------------------------------------------
 
 --
--- SQLINES DEMO *** or table `gio_hang`
+-- Table structure for table `gio_hang`
 --
 
 DROP TABLE IF EXISTS `gio_hang`;
@@ -145,36 +153,28 @@ CREATE TABLE IF NOT EXISTS `gio_hang` (
   PRIMARY KEY (`ma_gio_hang`),
   KEY `ma_nguoi_dung` (`ma_nguoi_dung`),
   KEY `ma_san_pham` (`ma_san_pham`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- SQLINES DEMO *** ---------------------------------------
 
-
--- Table structure for table `hinh_anh_bien_the`
+--
+-- Table structure for table `hinh_anh_san_pham`
 --
 
-DROP TABLE IF EXISTS `hinh_anh_bien_the`;
-CREATE TABLE IF NOT EXISTS `hinh_anh_bien_the` (
+DROP TABLE IF EXISTS `hinh_anh_san_pham`;
+CREATE TABLE IF NOT EXISTS `hinh_anh_san_pham` (
   `ma_hinh_anh` int NOT NULL AUTO_INCREMENT,
-  `ma_bien_the` int NOT NULL,
+  `ma_san_pham` int NOT NULL,
   `url_hinh_anh` varchar(255) NOT NULL,
   `thu_tu` int DEFAULT '0',
   PRIMARY KEY (`ma_hinh_anh`),
-  KEY `ma_bien_the` (`ma_bien_the`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  KEY `ma_san_pham` (`ma_san_pham`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- --------------------------------------------------------
 
 --
--- Dumping data for table `hinh_anh_bien_the`
---
-
-INSERT INTO `hinh_anh_bien_the` (`ma_hinh_anh`, `ma_bien_the`, `url_hinh_anh`, `thu_tu`) VALUES
-(3, 14, '/uploads/item1-1764433295742-524867427.png', 0),
-(4, 14, '/uploads/collection4-1764433295746-528247569.png', 1),
-(5, 15, '/uploads/collection2-1764433295747-568464108.png', 0),
-(6, 16, '/uploads/item5-1764434065626-491115620.png', 0);
-
---
--- SQLINES DEMO *** or table `kho`
+-- Table structure for table `kho`
 --
 
 DROP TABLE IF EXISTS `kho`;
@@ -183,12 +183,12 @@ CREATE TABLE IF NOT EXISTS `kho` (
   `ten_kho` varchar(100) NOT NULL,
   `dia_chi` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`ma_kho`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- SQLINES DEMO *** ---------------------------------------
+-- --------------------------------------------------------
 
 --
--- SQLINES DEMO *** or table `khuyen_mai`
+-- Table structure for table `khuyen_mai`
 --
 
 DROP TABLE IF EXISTS `khuyen_mai`;
@@ -199,59 +199,87 @@ CREATE TABLE IF NOT EXISTS `khuyen_mai` (
   `ngay_bat_dau` date DEFAULT NULL,
   `ngay_ket_thuc` date DEFAULT NULL,
   PRIMARY KEY (`ma_khuyen_mai`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- SQLINES DEMO *** ---------------------------------------
+-- --------------------------------------------------------
 
 --
--- SQLINES DEMO *** or table `nguoi_dung`
+-- Table structure for table `loai_san_pham`
+--
+
+DROP TABLE IF EXISTS `loai_san_pham`;
+CREATE TABLE IF NOT EXISTS `loai_san_pham` (
+  `ma_loai` int NOT NULL AUTO_INCREMENT,
+  `ten_loai` varchar(100) NOT NULL,
+  `mo_ta` text,
+  PRIMARY KEY (`ma_loai`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Dumping data for table `loai_san_pham`
+--
+
+INSERT INTO `loai_san_pham` (`ma_loai`, `ten_loai`, `mo_ta`) VALUES
+(1, 'Len', NULL),
+(2, 'Công cụ', NULL),
+(3, 'Workshop', NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `nguoi_dung`
 --
 
 DROP TABLE IF EXISTS `nguoi_dung`;
 CREATE TABLE IF NOT EXISTS `nguoi_dung` (
   `ma_nguoi_dung` int NOT NULL AUTO_INCREMENT,
   `ho_ten` varchar(100) NOT NULL,
+  `first_name` varchar(50) DEFAULT NULL,
+  `last_name` varchar(50) DEFAULT NULL,
   `username` varchar(50) NOT NULL,
   `email` varchar(100) NOT NULL,
   `mat_khau` varchar(255) NOT NULL,
   `so_dien_thoai` varchar(15) DEFAULT NULL,
-  `vai_tro` varchar(30) check (`vai_tro` in ('admin','khach_hang','nhan_vien')) DEFAULT 'khach_hang',
+  `dia_chi` varchar(255) DEFAULT NULL,
+  `thanh_pho` varchar(100) DEFAULT NULL,
+  `vai_tro` enum('admin','khach_hang','nhan_vien') DEFAULT 'khach_hang',
   `thoi_gian_tao` datetime DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`ma_nguoi_dung`),
-  CONSTRAINT `username` UNIQUE (`username`),
-  CONSTRAINT `email` UNIQUE (`email`)
-) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  UNIQUE KEY `username` (`username`),
+  UNIQUE KEY `email` (`email`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
--- SQLINES DEMO *** table `nguoi_dung`
+-- Dumping data for table `nguoi_dung`
 --
 
-INSERT INTO `nguoi_dung` (`ma_nguoi_dung`, `ho_ten`, `username`, `email`, `mat_khau`, `so_dien_thoai`, `vai_tro`, `thoi_gian_tao`) VALUES
-(1, 'a b', 'ab123', 'ab@gmail.com', '$2b$10$nHKs01Q3mNLZZ8.NGXDBWeWBTJoutYKGV1M6EQXxAwKAuEbopMJNW', '0123456789', 'khach_hang', '2025-11-03 15:50:51'),
-(2, 'a b c', 'admin', 'admin@gmail.com', '$2b$10$Pxj8Jfy562HgWoVkWN3jZ.kWxVSSqWIJu97LgOIwdMsSaxO8GZa2K', '0987654321', 'admin', '2025-11-03 16:09:47');
+INSERT INTO `nguoi_dung` (`ma_nguoi_dung`, `ho_ten`, `first_name`, `last_name`, `username`, `email`, `mat_khau`, `so_dien_thoai`, `dia_chi`, `thanh_pho`, `vai_tro`, `thoi_gian_tao`) VALUES
+(1, 'admin', 'Ếch', 'Con', 'admin', 'admin@gmail.com', '$2b$10$Pxj8Jfy562HgWoVkWN3jZ.kWxVSSqWIJu97LgOIwdMsSaxO8GZa2K', '0987654321', '181 Cao Lỗ', 'TP HCM', 'admin', '2025-11-03 16:09:47'),
+(2, 'Ếch Con', 'Ếch', 'Con', 'user1', 'user1@gmail.com', '$2b$10$XARtrRSHRGaEjZAr28.wL.DIyOFL3..caI3xAIVQQu7lYtfKuImE6', '0123456789', '180 Cao Lỗ', 'HCM', 'khach_hang', '2025-11-19 10:58:31'),
+(3, 'Ếch Con', 'Ếch', 'Con', 'echcon', 'echcondamdang@gmail.com', '$2b$10$GvXCc/YsONdAo7jTA2P44efBG21sHBH8kw8fZTaTVQ21q7A2zaJYy', '0321654987', '180 Cao Lỗ', 'HCM', 'khach_hang', '2025-11-24 19:09:45');
 
--- SQLINES DEMO *** ---------------------------------------
+-- --------------------------------------------------------
 
 --
--- SQLINES DEMO *** or table `nhan_vien`
+-- Table structure for table `nhan_vien`
 --
 
 DROP TABLE IF EXISTS `nhan_vien`;
 CREATE TABLE IF NOT EXISTS `nhan_vien` (
   `ma_nhan_vien` int NOT NULL AUTO_INCREMENT,
   `ma_nguoi_dung` int DEFAULT NULL,
-  `chuc_vu` varchar(30) check (`chuc_vu` in ('nv_ban_hang','nv_kho')) NOT NULL,
+  `chuc_vu` enum('nv_ban_hang','nv_kho') NOT NULL,
   `luong` decimal(12,2) DEFAULT NULL,
   `ngay_vao_lam` date DEFAULT NULL,
-  `trang_thai` varchar(30) check (`trang_thai` in ('dang_lam','nghi_viec')) DEFAULT 'dang_lam',
+  `trang_thai` enum('dang_lam','nghi_viec') DEFAULT 'dang_lam',
   PRIMARY KEY (`ma_nhan_vien`),
-  CONSTRAINT `ma_nguoi_dung` UNIQUE (`ma_nguoi_dung`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  UNIQUE KEY `ma_nguoi_dung` (`ma_nguoi_dung`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- SQLINES DEMO *** ---------------------------------------
+-- --------------------------------------------------------
 
 --
--- SQLINES DEMO *** or table `phuong`
+-- Table structure for table `phuong`
 --
 
 DROP TABLE IF EXISTS `phuong`;
@@ -261,12 +289,12 @@ CREATE TABLE IF NOT EXISTS `phuong` (
   `ma_quan` int DEFAULT NULL,
   PRIMARY KEY (`ma_phuong`),
   KEY `ma_quan` (`ma_quan`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- SQLINES DEMO *** ---------------------------------------
+-- --------------------------------------------------------
 
 --
--- SQLINES DEMO *** or table `quan`
+-- Table structure for table `quan`
 --
 
 DROP TABLE IF EXISTS `quan`;
@@ -276,35 +304,34 @@ CREATE TABLE IF NOT EXISTS `quan` (
   `ma_thanhpho` int DEFAULT NULL,
   PRIMARY KEY (`ma_quan`),
   KEY `ma_thanhpho` (`ma_thanhpho`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- SQLINES DEMO *** ---------------------------------------
+-- --------------------------------------------------------
 
 --
--- SQLINES DEMO *** or table `san_pham`
+-- Table structure for table `san_pham`
 --
 
 DROP TABLE IF EXISTS `san_pham`;
 CREATE TABLE IF NOT EXISTS `san_pham` (
   `ma_san_pham` int NOT NULL AUTO_INCREMENT,
-  `ma_danh_muc` int DEFAULT NULL,
+  `ma_loai` int NOT NULL,
+  `ma_danh_muc` int NOT NULL,
   `ten_san_pham` varchar(150) NOT NULL,
   `gia` decimal(10,2) NOT NULL,
   `mo_ta` text,
   `hinh_anh_url` varchar(255) DEFAULT NULL,
-  `loai_san_pham` varchar(30) check (`loai_san_pham` in ('san_pham','workshop')) DEFAULT 'san_pham',
   `thoi_gian_tao` datetime DEFAULT CURRENT_TIMESTAMP,
-  `thoi_gian_cap_nhat` datetime DEFAULT CURRENT_TIMESTAMP /* ON UPDATE CURRENT_TIMESTAMP */,
+  `thoi_gian_cap_nhat` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`ma_san_pham`),
-  KEY `ma_danh_muc` (`ma_danh_muc`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  KEY `ma_danh_muc` (`ma_danh_muc`),
+  KEY `ma_loai` (`ma_loai`)
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- SQLINES DEMO *** ---------------------------------------
-INSERT INTO `san_pham` (`ma_san_pham`, `ma_loai`, `ma_danh_muc`, `ten_san_pham`, `gia`, `mo_ta`, `hinh_anh_url`, `thoi_gian_tao`, `thoi_gian_cap_nhat`) VALUES
-(12, 1, 1, 'Len Cotton Milk Premium', 45000.00, '', NULL, '2025-11-29 23:21:35', '2025-11-29 23:21:35'),
-(13, 1, 1, 'Len Wool Premium', 80000.00, 'Len wool mềm mượt, thích hợp làm thú bông.', NULL, '2025-11-29 23:34:25', '2025-11-29 23:34:25');
+
 --
--- SQLINES DEMO *** or table `san_pham_khuyen_mai`
+-- Table structure for table `san_pham_khuyen_mai`
 --
 
 DROP TABLE IF EXISTS `san_pham_khuyen_mai`;
@@ -316,12 +343,12 @@ CREATE TABLE IF NOT EXISTS `san_pham_khuyen_mai` (
   `ghi_chu` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`ma_san_pham`,`ma_khuyen_mai`),
   KEY `ma_khuyen_mai` (`ma_khuyen_mai`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- SQLINES DEMO *** ---------------------------------------
+-- --------------------------------------------------------
 
 --
--- SQLINES DEMO *** or table `thanhpho`
+-- Table structure for table `thanhpho`
 --
 
 DROP TABLE IF EXISTS `thanhpho`;
@@ -329,12 +356,12 @@ CREATE TABLE IF NOT EXISTS `thanhpho` (
   `ma_thanhpho` int NOT NULL AUTO_INCREMENT,
   `ten_thanhpho` varchar(100) NOT NULL,
   PRIMARY KEY (`ma_thanhpho`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- SQLINES DEMO *** ---------------------------------------
+-- --------------------------------------------------------
 
 --
--- SQLINES DEMO *** or table `thanh_toan`
+-- Table structure for table `thanh_toan`
 --
 
 DROP TABLE IF EXISTS `thanh_toan`;
@@ -343,18 +370,18 @@ CREATE TABLE IF NOT EXISTS `thanh_toan` (
   `ma_nguoi_dung` int DEFAULT NULL,
   `ma_don_hang` int DEFAULT NULL,
   `so_tien` decimal(10,2) DEFAULT NULL,
-  `phuong_thuc` varchar(30) check (`phuong_thuc` in ('tien_mat','chuyen_khoan','momo')) DEFAULT 'tien_mat',
-  `trang_thai` varchar(30) check (`trang_thai` in ('cho_xu_ly','thanh_cong','that_bai')) DEFAULT 'cho_xu_ly',
+  `phuong_thuc` enum('tien_mat','chuyen_khoan','momo') DEFAULT 'tien_mat',
+  `trang_thai` enum('cho_xu_ly','thanh_cong','that_bai') DEFAULT 'cho_xu_ly',
   `thoi_gian_thanh_toan` datetime DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`ma_thanh_toan`),
   KEY `ma_nguoi_dung` (`ma_nguoi_dung`),
   KEY `ma_don_hang` (`ma_don_hang`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- SQLINES DEMO *** ---------------------------------------
+-- --------------------------------------------------------
 
 --
--- SQLINES DEMO *** or table `ton_kho`
+-- Table structure for table `ton_kho`
 --
 
 DROP TABLE IF EXISTS `ton_kho`;
@@ -368,12 +395,12 @@ CREATE TABLE IF NOT EXISTS `ton_kho` (
   KEY `ma_kho` (`ma_kho`),
   KEY `ma_san_pham` (`ma_san_pham`),
   KEY `ma_bien_the` (`ma_bien_the`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- SQLINES DEMO *** ---------------------------------------
+-- --------------------------------------------------------
 
 --
--- SQLINES DEMO *** or table `workshop`
+-- Table structure for table `workshop`
 --
 
 DROP TABLE IF EXISTS `workshop`;
@@ -386,10 +413,109 @@ CREATE TABLE IF NOT EXISTS `workshop` (
   `ngay_ket_thuc` datetime DEFAULT NULL,
   `so_luong_toi_da` int DEFAULT NULL,
   PRIMARY KEY (`ma_workshop`),
-  CONSTRAINT `ma_san_pham` UNIQUE (`ma_san_pham`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  UNIQUE KEY `ma_san_pham` (`ma_san_pham`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Constraints for dumped tables
+--
+
+--
+-- Constraints for table `bien_the_san_pham`
+--
+ALTER TABLE `bien_the_san_pham`
+  ADD CONSTRAINT `bien_the_san_pham_ibfk_1` FOREIGN KEY (`ma_san_pham`) REFERENCES `san_pham` (`ma_san_pham`);
+
+--
+-- Constraints for table `chi_tiet_don_hang`
+--
+ALTER TABLE `chi_tiet_don_hang`
+  ADD CONSTRAINT `chi_tiet_don_hang_ibfk_1` FOREIGN KEY (`ma_don_hang`) REFERENCES `don_hang` (`ma_don_hang`),
+  ADD CONSTRAINT `chi_tiet_don_hang_ibfk_2` FOREIGN KEY (`ma_san_pham`) REFERENCES `san_pham` (`ma_san_pham`),
+  ADD CONSTRAINT `chi_tiet_don_hang_ibfk_3` FOREIGN KEY (`ma_bien_the`) REFERENCES `bien_the_san_pham` (`ma_bien_the`);
+
+--
+-- Constraints for table `don_hang`
+--
+ALTER TABLE `don_hang`
+  ADD CONSTRAINT `don_hang_ibfk_1` FOREIGN KEY (`ma_nguoi_dung`) REFERENCES `nguoi_dung` (`ma_nguoi_dung`),
+  ADD CONSTRAINT `don_hang_ibfk_2` FOREIGN KEY (`ma_thanhpho`) REFERENCES `thanhpho` (`ma_thanhpho`),
+  ADD CONSTRAINT `don_hang_ibfk_3` FOREIGN KEY (`ma_quan`) REFERENCES `quan` (`ma_quan`),
+  ADD CONSTRAINT `don_hang_ibfk_4` FOREIGN KEY (`ma_phuong`) REFERENCES `phuong` (`ma_phuong`);
+
+--
+-- Constraints for table `gio_hang`
+--
+ALTER TABLE `gio_hang`
+  ADD CONSTRAINT `gio_hang_ibfk_1` FOREIGN KEY (`ma_nguoi_dung`) REFERENCES `nguoi_dung` (`ma_nguoi_dung`),
+  ADD CONSTRAINT `gio_hang_ibfk_2` FOREIGN KEY (`ma_san_pham`) REFERENCES `san_pham` (`ma_san_pham`);
+
+--
+-- Constraints for table `hinh_anh_bien_the`
+--
+ALTER TABLE `hinh_anh_bien_the`
+  ADD CONSTRAINT `hinh_anh_bien_the_ibfk_1` FOREIGN KEY (`ma_bien_the`) REFERENCES `bien_the_san_pham` (`ma_bien_the`) ON DELETE CASCADE;
+
+--
+-- Constraints for table `hinh_anh_san_pham`
+--
+ALTER TABLE `hinh_anh_san_pham`
+  ADD CONSTRAINT `hinh_anh_san_pham_ibfk_1` FOREIGN KEY (`ma_san_pham`) REFERENCES `san_pham` (`ma_san_pham`) ON DELETE CASCADE;
+
+--
+-- Constraints for table `nhan_vien`
+--
+ALTER TABLE `nhan_vien`
+  ADD CONSTRAINT `nhan_vien_ibfk_1` FOREIGN KEY (`ma_nguoi_dung`) REFERENCES `nguoi_dung` (`ma_nguoi_dung`);
+
+--
+-- Constraints for table `phuong`
+--
+ALTER TABLE `phuong`
+  ADD CONSTRAINT `phuong_ibfk_1` FOREIGN KEY (`ma_quan`) REFERENCES `quan` (`ma_quan`);
+
+--
+-- Constraints for table `quan`
+--
+ALTER TABLE `quan`
+  ADD CONSTRAINT `quan_ibfk_1` FOREIGN KEY (`ma_thanhpho`) REFERENCES `thanhpho` (`ma_thanhpho`);
+
+--
+-- Constraints for table `san_pham`
+--
+ALTER TABLE `san_pham`
+  ADD CONSTRAINT `san_pham_ibfk_1` FOREIGN KEY (`ma_danh_muc`) REFERENCES `danh_muc` (`ma_danh_muc`),
+  ADD CONSTRAINT `san_pham_ibfk_2` FOREIGN KEY (`ma_loai`) REFERENCES `loai_san_pham` (`ma_loai`);
+
+--
+-- Constraints for table `san_pham_khuyen_mai`
+--
+ALTER TABLE `san_pham_khuyen_mai`
+  ADD CONSTRAINT `san_pham_khuyen_mai_ibfk_1` FOREIGN KEY (`ma_san_pham`) REFERENCES `san_pham` (`ma_san_pham`),
+  ADD CONSTRAINT `san_pham_khuyen_mai_ibfk_2` FOREIGN KEY (`ma_khuyen_mai`) REFERENCES `khuyen_mai` (`ma_khuyen_mai`);
+
+--
+-- Constraints for table `thanh_toan`
+--
+ALTER TABLE `thanh_toan`
+  ADD CONSTRAINT `thanh_toan_ibfk_1` FOREIGN KEY (`ma_nguoi_dung`) REFERENCES `nguoi_dung` (`ma_nguoi_dung`),
+  ADD CONSTRAINT `thanh_toan_ibfk_2` FOREIGN KEY (`ma_don_hang`) REFERENCES `don_hang` (`ma_don_hang`);
+
+--
+-- Constraints for table `ton_kho`
+--
+ALTER TABLE `ton_kho`
+  ADD CONSTRAINT `ton_kho_ibfk_1` FOREIGN KEY (`ma_kho`) REFERENCES `kho` (`ma_kho`),
+  ADD CONSTRAINT `ton_kho_ibfk_2` FOREIGN KEY (`ma_san_pham`) REFERENCES `san_pham` (`ma_san_pham`),
+  ADD CONSTRAINT `ton_kho_ibfk_3` FOREIGN KEY (`ma_bien_the`) REFERENCES `bien_the_san_pham` (`ma_bien_the`);
+
+--
+-- Constraints for table `workshop`
+--
+ALTER TABLE `workshop`
+  ADD CONSTRAINT `workshop_ibfk_1` FOREIGN KEY (`ma_san_pham`) REFERENCES `san_pham` (`ma_san_pham`);
 COMMIT;
 
-/* SQLINES DEMO *** CTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-/* SQLINES DEMO *** CTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
-/* SQLINES DEMO *** TION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
