@@ -5,7 +5,7 @@ function isAdmin(req) {
 	return req.user && req.user.role === 'admin';
 }
 
-// Hàm chuyển đổi dữ liệu từ database sang format dễ dùng
+// Hàm chuyển đổi dữ liệu từ database
 function mapCategoryRow(row) {
 	return {
 		id: row.id,
@@ -14,10 +14,10 @@ function mapCategoryRow(row) {
 	};
 }
 
-// 1. LẤY DANH SÁCH TẤT CẢ DANH MỤC (GET /categories)
+// Lấy danh sách danh mục (GET /categories)
 async function listCategories(req, res) {
 	try {
-		// Query SQL: SELECT từ bảng danh_muc
+		// SELECT từ bảng danh_muc
 		const [rows] = await pool.execute(
 			`SELECT ma_danh_muc AS id,
 			        ten_danh_muc AS name,
@@ -40,7 +40,7 @@ async function listCategories(req, res) {
 	}
 }
 
-// 2. LẤY 1 DANH MỤC THEO ID (GET /categories/:id)
+// Lấy 1 danh mục theo id (GET /categories/:id)
 async function getCategoryById(req, res) {
 	try {
 		const { id } = req.params; // Lấy id từ URL
@@ -74,7 +74,7 @@ async function getCategoryById(req, res) {
 	}
 }
 
-// 3. TẠO DANH MỤC MỚI (POST /categories) - CHỈ ADMIN
+// Tạo danh mục (POST /categories) - CHỈ ADMIN
 async function createCategory(req, res) {
 	try {
 		// Kiểm tra quyền admin
@@ -117,7 +117,7 @@ async function createCategory(req, res) {
 	}
 }
 
-// 4. CẬP NHẬT DANH MỤC (PUT /categories/:id) - CHỈ ADMIN
+// Cập nhật danh mục (PUT /categories/:id) - CHỈ ADMIN
 async function updateCategory(req, res) {
 	try {
 		if (!isAdmin(req)) {
@@ -177,7 +177,7 @@ async function updateCategory(req, res) {
 	}
 }
 
-// 5. XÓA DANH MỤC (DELETE /categories/:id) - CHỈ ADMIN
+// Xóa danh mục (DELETE /categories/:id) - CHỈ ADMIN
 async function deleteCategory(req, res) {
 	try {
 		if (!isAdmin(req)) {
