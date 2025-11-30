@@ -41,6 +41,11 @@ CREATE TABLE IF NOT EXISTS `bien_the_san_pham` (
   KEY `ma_san_pham` (`ma_san_pham`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
+INSERT INTO `bien_the_san_pham` (`ma_bien_the`, `ma_san_pham`, `mau_sac`, `kich_co`, `chat_lieu`, `url_hinh_anh_bien_the`, `gia_them`) VALUES
+(14, 12, 'Hồng Pastel', '100g', 'Milk Cotton', '/uploads/item1-1764433295742-524867427.png', 0.00),
+(15, 12, 'Xanh Pastel', '100g', 'Milk Cotton', '/uploads/collection2-1764433295747-568464108.png', 0.00),
+(16, 13, 'Xanh Pastel', '200g', 'Wool', '/uploads/item5-1764434065626-491115620.png', 0.00);
+
 -- SQLINES DEMO *** ---------------------------------------
 
 --
@@ -94,6 +99,11 @@ CREATE TABLE IF NOT EXISTS `danh_muc` (
   PRIMARY KEY (`ma_danh_muc`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
+INSERT INTO `danh_muc` (`ma_danh_muc`, `ten_danh_muc`, `mo_ta`) VALUES
+(1, 'Len', NULL),
+(2, 'Công cụ', NULL),
+(3, 'Workshop', NULL);
+
 -- SQLINES DEMO *** ---------------------------------------
 
 --
@@ -138,6 +148,30 @@ CREATE TABLE IF NOT EXISTS `gio_hang` (
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- SQLINES DEMO *** ---------------------------------------
+
+
+-- Table structure for table `hinh_anh_bien_the`
+--
+
+DROP TABLE IF EXISTS `hinh_anh_bien_the`;
+CREATE TABLE IF NOT EXISTS `hinh_anh_bien_the` (
+  `ma_hinh_anh` int NOT NULL AUTO_INCREMENT,
+  `ma_bien_the` int NOT NULL,
+  `url_hinh_anh` varchar(255) NOT NULL,
+  `thu_tu` int DEFAULT '0',
+  PRIMARY KEY (`ma_hinh_anh`),
+  KEY `ma_bien_the` (`ma_bien_the`)
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Dumping data for table `hinh_anh_bien_the`
+--
+
+INSERT INTO `hinh_anh_bien_the` (`ma_hinh_anh`, `ma_bien_the`, `url_hinh_anh`, `thu_tu`) VALUES
+(3, 14, '/uploads/item1-1764433295742-524867427.png', 0),
+(4, 14, '/uploads/collection4-1764433295746-528247569.png', 1),
+(5, 15, '/uploads/collection2-1764433295747-568464108.png', 0),
+(6, 16, '/uploads/item5-1764434065626-491115620.png', 0);
 
 --
 -- SQLINES DEMO *** or table `kho`
@@ -266,7 +300,9 @@ CREATE TABLE IF NOT EXISTS `san_pham` (
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- SQLINES DEMO *** ---------------------------------------
-
+INSERT INTO `san_pham` (`ma_san_pham`, `ma_loai`, `ma_danh_muc`, `ten_san_pham`, `gia`, `mo_ta`, `hinh_anh_url`, `thoi_gian_tao`, `thoi_gian_cap_nhat`) VALUES
+(12, 1, 1, 'Len Cotton Milk Premium', 45000.00, '', NULL, '2025-11-29 23:21:35', '2025-11-29 23:21:35'),
+(13, 1, 1, 'Len Wool Premium', 80000.00, 'Len wool mềm mượt, thích hợp làm thú bông.', NULL, '2025-11-29 23:34:25', '2025-11-29 23:34:25');
 --
 -- SQLINES DEMO *** or table `san_pham_khuyen_mai`
 --
