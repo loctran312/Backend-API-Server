@@ -273,7 +273,8 @@ async function getProductById(req, res) {
 					imagePath: v.imagePath,
 					imageUrl: buildImageUrl(req, v.imagePath),
 					images: variantImages.length > 0 ? variantImages : (v.imagePath ? [{ imagePath: v.imagePath, imageUrl: buildImageUrl(req, v.imagePath) }] : []),
-					extraPrice: Number(v.extraPrice) || 0
+					extraPrice: Number(v.extraPrice) || 0,
+					stock: v.stock
 				};
 			}));
 			
