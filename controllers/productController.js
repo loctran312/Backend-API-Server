@@ -109,22 +109,40 @@ async function mapProduct(row, req) {
 
 async function listProducts(req, res) {
 	try {
-		// Query từ bảng san_pham (hiển thị sản phẩm, lấy hình ảnh đầu tiên làm hình ảnh chính cho sản phẩm)
-		const [rows] = await pool.execute(
-			`SELECT sp.ma_san_pham AS id,
-			        sp.ten_san_pham AS name,
-			        sp.gia AS price,
-			        sp.mo_ta AS description,
-			        sp.hinh_anh_url AS imagePath,
-			        lsp.ten_loai AS productType,
-			        sp.ma_danh_muc AS categoryId,
-			        dm.ten_danh_muc AS categoryName,
-			        sp.thoi_gian_tao AS createdAt
-			 FROM san_pham sp
-			 LEFT JOIN danh_muc dm ON sp.ma_danh_muc = dm.ma_danh_muc
-			 LEFT JOIN loai_san_pham lsp ON sp.ma_loai = lsp.ma_loai
-			 ORDER BY sp.thoi_gian_tao DESC`
-		);
+		const { search, categoryId } = req.query;
+        // Xây dựng câu truy vấn SQL động
+        let sql = `SELECT sp.ma_san_pham AS id,
+                        sp.ten_san_pham AS name,
+                        sp.gia AS price,
+                        sp.mo_ta AS description,
+                        sp.hinh_anh_url AS imagePath,
+                        lsp.ten_loai AS productType,
+                        sp.ma_danh_muc AS categoryId,
+                        dm.ten_danh_muc AS categoryName,
+                        sp.thoi_gian_tao AS createdAt
+                 FROM san_pham sp
+                 LEFT JOIN danh_muc dm ON sp.ma_danh_muc = dm.ma_danh_muc
+                 LEFT JOIN loai_san_pham lsp ON sp.ma_loai = lsp.ma_loai
+                 WHERE 1=1`; // Mẹo: WHERE 1=1 để dễ dàng nối thêm AND
+        const params = [];
+
+		// Thêm điều kiện tìm kiếm theo tên
+        if (search) {
+            sql += ` AND sp.ten_san_pham LIKE ?`;
+            params.push(`%${search}%`);
+        }
+
+        // Thêm điều kiện lọc theo danh mục
+        if (categoryId) {
+            sql += ` AND sp.ma_danh_muc = ?`;
+            params.push(categoryId);
+        }
+
+		// Thêm sắp xếp
+        sql += ` ORDER BY sp.thoi_gian_tao DESC`;
+		
+        // Thực thi truy vấn
+        const [rows] = await pool.execute(sql, params);
 		
 		// Lấy biến thể và hình ảnh cho từng sản phẩm
 		const productsWithVariants = await Promise.all(rows.map(async (row) => {
@@ -214,11 +232,13 @@ async function getProductById(req, res) {
 		// Lấy các biến thể của sản phẩm
 		try {
 			const [variants] = await pool.execute(
-				`SELECT ma_bien_the AS id, mau_sac AS color, kich_co AS size, 
-				        chat_lieu AS material, url_hinh_anh_bien_the AS imagePath, 
-				        gia_them AS extraPrice
-				 FROM bien_the_san_pham 
-				 WHERE ma_san_pham = ?`,
+				`SELECT b.ma_bien_the AS id, b.mau_sac AS color, b.kich_co AS size, 
+				        b.chat_lieu AS material, b.url_hinh_anh_bien_the AS imagePath, 
+				        b.gia_them AS extraPrice,
+				        COALESCE(t.so_luong_ton, 0) AS stock
+				 FROM bien_the_san_pham b
+				 LEFT JOIN ton_kho t ON b.ma_bien_the = t.ma_bien_the AND t.ma_kho = 1
+				 WHERE b.ma_san_pham = ?`,
 				[id]
 			);
 			
@@ -404,6 +424,20 @@ async function createProduct(req, res) {
 						);
 						
 						const variantId = variantResult.insertId;
+
+						// Lưu vào bảng ton_kho
+						if (variant.stock !== undefined) {
+							await pool.execute(
+								`INSERT INTO ton_kho (ma_kho, ma_san_pham, ma_bien_the, so_luong_ton)
+								VALUES (?, ?, ?, ?)`,
+								[
+									1,
+									productId,
+									variantId,
+									Number(variant.stock) || 0
+								]
+							);
+						}
 						
 						// Lưu nhiều hình ảnh cho biến thể vào bảng hinh_anh_bien_the
 						try {
@@ -578,6 +612,9 @@ async function updateProduct(req, res) {
 				}
 			}
 			
+			// Xóa tồn kho của sản phẩm trước
+			await pool.execute('DELETE FROM ton_kho WHERE ma_san_pham = ?', [id]);
+			
 			await pool.execute('DELETE FROM bien_the_san_pham WHERE ma_san_pham = ?', [id]);
 			
 			let variantsData;
@@ -616,6 +653,20 @@ async function updateProduct(req, res) {
 					);
 					
 					const variantId = variantResult.insertId;
+
+					// Lưu vào bảng ton_kho
+					if (variant.stock !== undefined) {
+						await pool.execute(
+							`INSERT INTO ton_kho (ma_kho, ma_san_pham, ma_bien_the, so_luong_ton)
+							VALUES (?, ?, ?, ?)`,
+							[
+								1,
+								id,
+								variantId,
+								Number(variant.stock) || 0
+							]
+						);
+					}
 					
 					// Lưu nhiều hình ảnh cho biến thể vào bảng hinh_anh_bien_the
 					try {
@@ -698,6 +749,9 @@ async function deleteProduct(req, res) {
 				fs.unlink(variantFilePath, () => {});
 			}
 		}
+		
+		// Xóa tồn kho của sản phẩm trước
+		await pool.execute('DELETE FROM ton_kho WHERE ma_san_pham = ?', [id]);
 		
 		// Xóa biến thể trước (do foreign key constraint)
 		await pool.execute('DELETE FROM bien_the_san_pham WHERE ma_san_pham = ?', [id]);
