@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 
+// Import middleware xác thực
 const { verifyToken } = require('../controllers/authController');
 
 function requireAdmin(req, res, next) {
