@@ -599,7 +599,7 @@ async function updateProduct(req, res) {
 					oldVariantImages.forEach(img => {
 						if (img.url_hinh_anh && img.url_hinh_anh.startsWith('/uploads/')) {
 							const filePath = path.join(__dirname, '..', img.url_hinh_anh);
-							fs.unlink(filePath, () => {});
+							// fs.unlink(filePath, () => {});
 						}
 					});
 				} catch (err) {
@@ -609,7 +609,7 @@ async function updateProduct(req, res) {
 				// Xóa file ảnh chính của biến thể
 				if (oldVariant.url_hinh_anh_bien_the && oldVariant.url_hinh_anh_bien_the.startsWith('/uploads/')) {
 					const oldPath = path.join(__dirname, '..', oldVariant.url_hinh_anh_bien_the);
-					fs.unlink(oldPath, () => {});
+					// fs.unlink(oldPath, () => {});
 				}
 			}
 			
