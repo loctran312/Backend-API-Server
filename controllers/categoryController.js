@@ -14,7 +14,7 @@ function mapCategoryRow(row) {
 	};
 }
 
-// 1. LẤY DANH SÁCH TẤT CẢ DANH MỤC (GET /categories)
+// LẤY DANH SÁCH TẤT CẢ DANH MỤC (GET /categories)
 async function listCategories(req, res) {
 	try {
 		// Query SQL: SELECT từ bảng danh_muc
@@ -40,7 +40,7 @@ async function listCategories(req, res) {
 	}
 }
 
-// 2. LẤY 1 DANH MỤC THEO ID (GET /categories/:id)
+// LẤY 1 DANH MỤC THEO ID (GET /categories/:id)
 async function getCategoryById(req, res) {
 	try {
 		const { id } = req.params; // Lấy id từ URL
@@ -74,7 +74,7 @@ async function getCategoryById(req, res) {
 	}
 }
 
-// 3. TẠO DANH MỤC MỚI (POST /categories) - CHỈ ADMIN
+// TẠO DANH MỤC MỚI (POST /categories) - CHỈ ADMIN
 async function createCategory(req, res) {
 	try {
 		// Kiểm tra quyền admin
@@ -117,7 +117,7 @@ async function createCategory(req, res) {
 	}
 }
 
-// 4. CẬP NHẬT DANH MỤC (PUT /categories/:id) - CHỈ ADMIN
+// CẬP NHẬT DANH MỤC (PUT /categories/:id) - CHỈ ADMIN
 async function updateCategory(req, res) {
 	try {
 		if (!isAdmin(req)) {
@@ -177,7 +177,7 @@ async function updateCategory(req, res) {
 	}
 }
 
-// 5. XÓA DANH MỤC (DELETE /categories/:id) - CHỈ ADMIN
+// XÓA DANH MỤC (DELETE /categories/:id) - CHỈ ADMIN
 async function deleteCategory(req, res) {
 	try {
 		if (!isAdmin(req)) {

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: Nov 30, 2025 at 11:15 AM
+-- Generation Time: Dec 13, 2025 at 09:02 AM
 -- Server version: 9.1.0
 -- PHP Version: 8.3.14
 
@@ -19,15 +19,14 @@ SET time_zone = "+00:00";
 
 --
 -- Database: `shoplen`
-  CREATE Database shoplen1;
-  use shoplen1
+--
 
 -- --------------------------------------------------------
 
 --
 -- Table structure for table `bien_the_san_pham`
 --
-  
+
 DROP TABLE IF EXISTS `bien_the_san_pham`;
 CREATE TABLE IF NOT EXISTS `bien_the_san_pham` (
   `ma_bien_the` int NOT NULL AUTO_INCREMENT,
@@ -39,16 +38,17 @@ CREATE TABLE IF NOT EXISTS `bien_the_san_pham` (
   `gia_them` decimal(10,2) DEFAULT '0.00',
   PRIMARY KEY (`ma_bien_the`),
   KEY `ma_san_pham` (`ma_san_pham`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=55 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Dumping data for table `bien_the_san_pham`
 --
 
 INSERT INTO `bien_the_san_pham` (`ma_bien_the`, `ma_san_pham`, `mau_sac`, `kich_co`, `chat_lieu`, `url_hinh_anh_bien_the`, `gia_them`) VALUES
-(14, 12, 'Hồng Pastel', '100g', 'Milk Cotton', '/uploads/item1-1764433295742-524867427.png', 0.00),
-(15, 12, 'Xanh Pastel', '100g', 'Milk Cotton', '/uploads/collection2-1764433295747-568464108.png', 0.00),
-(16, 13, 'Xanh Pastel', '200g', 'Wool', '/uploads/item5-1764434065626-491115620.png', 0.00);
+(47, 28, 'Hồng Wool', '100g', 'Wool', 'http://localhost:3000/uploads/collection1-1765002786480-920104436.png', 0.00),
+(48, 28, 'Đỏ Wool', '100g', 'Wool', 'http://localhost:3000/uploads/down4-1765002786484-670254321.png', 55000.00),
+(53, 27, 'Hồng Pastel', '100g', 'Cotton', 'http://localhost:3000/uploads/item1-1764770677147-827675066.png', 49000.00),
+(54, 27, 'Xanh Pastel', '100g', 'Cotton', 'http://localhost:3000/uploads/collection2-1764770677152-863891815.png', 0.00);
 
 -- --------------------------------------------------------
 
@@ -101,7 +101,7 @@ CREATE TABLE IF NOT EXISTS `danh_muc` (
   `ten_danh_muc` varchar(100) NOT NULL,
   `mo_ta` text,
   PRIMARY KEY (`ma_danh_muc`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Dumping data for table `danh_muc`
@@ -110,7 +110,7 @@ CREATE TABLE IF NOT EXISTS `danh_muc` (
 INSERT INTO `danh_muc` (`ma_danh_muc`, `ten_danh_muc`, `mo_ta`) VALUES
 (1, 'Len', NULL),
 (2, 'Công cụ', NULL),
-(3, 'Workshop', NULL);
+(3, 'Workshop', '');
 
 -- --------------------------------------------------------
 
@@ -149,13 +149,43 @@ CREATE TABLE IF NOT EXISTS `gio_hang` (
   `ma_gio_hang` int NOT NULL AUTO_INCREMENT,
   `ma_nguoi_dung` int DEFAULT NULL,
   `ma_san_pham` int DEFAULT NULL,
+  `ma_bien_the` int DEFAULT NULL,
   `so_luong` int DEFAULT '1',
   PRIMARY KEY (`ma_gio_hang`),
   KEY `ma_nguoi_dung` (`ma_nguoi_dung`),
-  KEY `ma_san_pham` (`ma_san_pham`)
+  KEY `ma_san_pham` (`ma_san_pham`),
+  KEY `gio_hang_fk_variant` (`ma_bien_the`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- SQLINES DEMO *** ---------------------------------------
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `hinh_anh_bien_the`
+--
+
+DROP TABLE IF EXISTS `hinh_anh_bien_the`;
+CREATE TABLE IF NOT EXISTS `hinh_anh_bien_the` (
+  `ma_hinh_anh` int NOT NULL AUTO_INCREMENT,
+  `ma_bien_the` int NOT NULL,
+  `url_hinh_anh` varchar(255) NOT NULL,
+  `thu_tu` int DEFAULT '0',
+  PRIMARY KEY (`ma_hinh_anh`),
+  KEY `ma_bien_the` (`ma_bien_the`)
+) ENGINE=InnoDB AUTO_INCREMENT=63 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Dumping data for table `hinh_anh_bien_the`
+--
+
+INSERT INTO `hinh_anh_bien_the` (`ma_hinh_anh`, `ma_bien_the`, `url_hinh_anh`, `thu_tu`) VALUES
+(51, 47, 'http://localhost:3000/uploads/item4-1765002786481-507588849.png', 1),
+(52, 47, 'http://localhost:3000/uploads/collection1-1765002786480-920104436.png', 0),
+(53, 48, 'http://localhost:3000/uploads/down4-1765002786484-670254321.png', 0),
+(60, 53, 'http://localhost:3000/uploads/item1-1764770677147-827675066.png', 0),
+(61, 53, 'http://localhost:3000/uploads/collection4-1764770677150-773351408.png', 1),
+(62, 54, 'http://localhost:3000/uploads/collection2-1764770677152-863891815.png', 0);
+
+-- --------------------------------------------------------
 
 --
 -- Table structure for table `hinh_anh_san_pham`
@@ -183,7 +213,14 @@ CREATE TABLE IF NOT EXISTS `kho` (
   `ten_kho` varchar(100) NOT NULL,
   `dia_chi` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`ma_kho`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Dumping data for table `kho`
+--
+
+INSERT INTO `kho` (`ma_kho`, `ten_kho`, `dia_chi`) VALUES
+(1, 'Peace Chill', '180 Cao Lỗ, Quận 8, Thành phố Hồ Chí Minh');
 
 -- --------------------------------------------------------
 
@@ -255,8 +292,7 @@ CREATE TABLE IF NOT EXISTS `nguoi_dung` (
 
 INSERT INTO `nguoi_dung` (`ma_nguoi_dung`, `ho_ten`, `first_name`, `last_name`, `username`, `email`, `mat_khau`, `so_dien_thoai`, `dia_chi`, `thanh_pho`, `vai_tro`, `thoi_gian_tao`) VALUES
 (1, 'admin', 'Ếch', 'Con', 'admin', 'admin@gmail.com', '$2b$10$Pxj8Jfy562HgWoVkWN3jZ.kWxVSSqWIJu97LgOIwdMsSaxO8GZa2K', '0987654321', '181 Cao Lỗ', 'TP HCM', 'admin', '2025-11-03 16:09:47'),
-(2, 'Ếch Con', 'Ếch', 'Con', 'user1', 'user1@gmail.com', '$2b$10$XARtrRSHRGaEjZAr28.wL.DIyOFL3..caI3xAIVQQu7lYtfKuImE6', '0123456789', '180 Cao Lỗ', 'HCM', 'khach_hang', '2025-11-19 10:58:31'),
-(3, 'Ếch Con', 'Ếch', 'Con', 'echcon', 'echcondamdang@gmail.com', '$2b$10$GvXCc/YsONdAo7jTA2P44efBG21sHBH8kw8fZTaTVQ21q7A2zaJYy', '0321654987', '180 Cao Lỗ', 'HCM', 'khach_hang', '2025-11-24 19:09:45');
+(2, 'Ếch Con', 'Ếch', 'Con', 'user1', 'user1@gmail.com', '$2b$10$XARtrRSHRGaEjZAr28.wL.DIyOFL3..caI3xAIVQQu7lYtfKuImE6', '0123456789', '180 Cao Lỗ', 'HCM', 'khach_hang', '2025-11-19 10:58:31');
 
 -- --------------------------------------------------------
 
@@ -326,9 +362,17 @@ CREATE TABLE IF NOT EXISTS `san_pham` (
   PRIMARY KEY (`ma_san_pham`),
   KEY `ma_danh_muc` (`ma_danh_muc`),
   KEY `ma_loai` (`ma_loai`)
-) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=29 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- SQLINES DEMO *** ---------------------------------------
+--
+-- Dumping data for table `san_pham`
+--
+
+INSERT INTO `san_pham` (`ma_san_pham`, `ma_loai`, `ma_danh_muc`, `ten_san_pham`, `gia`, `mo_ta`, `hinh_anh_url`, `thoi_gian_tao`, `thoi_gian_cap_nhat`) VALUES
+(27, 1, 1, 'Len Cotton Milk Premium', 45000.00, '', NULL, '2025-12-03 21:04:37', '2025-12-03 21:04:37'),
+(28, 1, 1, 'Len Wool Premium', 50000.00, '', NULL, '2025-12-06 13:33:06', '2025-12-06 13:33:06');
+
+-- --------------------------------------------------------
 
 --
 -- Table structure for table `san_pham_khuyen_mai`
@@ -395,7 +439,17 @@ CREATE TABLE IF NOT EXISTS `ton_kho` (
   KEY `ma_kho` (`ma_kho`),
   KEY `ma_san_pham` (`ma_san_pham`),
   KEY `ma_bien_the` (`ma_bien_the`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=30 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Dumping data for table `ton_kho`
+--
+
+INSERT INTO `ton_kho` (`ma_ton`, `ma_kho`, `ma_san_pham`, `ma_bien_the`, `so_luong_ton`) VALUES
+(22, 1, 28, 47, 90),
+(23, 1, 28, 48, 95),
+(28, 1, 27, 53, 99),
+(29, 1, 27, 54, 98);
 
 -- --------------------------------------------------------
 
@@ -447,6 +501,7 @@ ALTER TABLE `don_hang`
 -- Constraints for table `gio_hang`
 --
 ALTER TABLE `gio_hang`
+  ADD CONSTRAINT `gio_hang_fk_variant` FOREIGN KEY (`ma_bien_the`) REFERENCES `bien_the_san_pham` (`ma_bien_the`) ON DELETE SET NULL,
   ADD CONSTRAINT `gio_hang_ibfk_1` FOREIGN KEY (`ma_nguoi_dung`) REFERENCES `nguoi_dung` (`ma_nguoi_dung`),
   ADD CONSTRAINT `gio_hang_ibfk_2` FOREIGN KEY (`ma_san_pham`) REFERENCES `san_pham` (`ma_san_pham`);
 
