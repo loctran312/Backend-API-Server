@@ -107,37 +107,28 @@ exports.mergeCart = async (req, res) => {
     if (!cartItems || !Array.isArray(cartItems) || cartItems.length === 0) {
         return res.json({ status: 'success', message: 'Nothing to merge' });
     }
-    // Dùng Promise.all để chờ tất cả các lệnh thêm DB chạy xong
+    
     try {
-        const promises = cartItems.map(item => {
-            return new Promise((resolve, reject) => {
-                const { ma_bien_the, so_luong } = item;
-                
-                const checkSql = `SELECT * FROM gio_hang WHERE ma_nguoi_dung = ? AND ma_bien_the = ?`;
-                
-                db.query(checkSql, [userId, ma_bien_the], (err, results) => {
-                    if (err) return reject(err);
-                    if (results.length > 0) {
-                        // Sản phẩm đã có trong giỏ hàng thì tăng số lượng
-                        const newQty = results[0].so_luong + Number(so_luong);
-                        db.query('UPDATE gio_hang SET so_luong = ? WHERE ma_gio_hang = ?', [newQty, results[0].ma_gio_hang], (err) => {
-                            if (err) return reject(err);
-                            resolve();
-                        });
-                    } else {
-                        // Sản phẩm chưa có trong giỏ hàng thì thêm mới
-                        const insertSql = `INSERT INTO gio_hang (ma_nguoi_dung, ma_bien_the, so_luong) VALUES (?, ?, ?)`;
-                        db.query(insertSql, [userId, ma_bien_the, so_luong], (err) => {
-                            if (err) return reject(err);
-                            resolve();
-                        });
-                    }
-                });
-            });
-        });
-        await Promise.all(promises);
+        for (const item of cartItems) {
+            const { ma_bien_the, so_luong } = item;
+            
+            // Kiểm tra sản phẩm đã có trong giỏ hàng chưa
+            const checkSql = `SELECT * FROM gio_hang WHERE ma_nguoi_dung = ? AND ma_bien_the = ?`;
+            const [results] = await db.query(checkSql, [userId, ma_bien_the]);
+            
+            if (results.length > 0) {
+                // Cập nhật số lượng
+                const newQty = results[0].so_luong + Number(so_luong);
+                await db.query('UPDATE gio_hang SET so_luong = ? WHERE ma_gio_hang = ?', [newQty, results[0].ma_gio_hang]);
+            } else {
+                // Thêm vào giỏ hàng
+                const insertSql = `INSERT INTO gio_hang (ma_nguoi_dung, ma_bien_the, so_luong) VALUES (?, ?, ?)`;
+                await db.query(insertSql, [userId, ma_bien_the, so_luong]);
+            }
+        }
         res.json({ status: 'success', message: 'Merged successfully' });
     } catch (error) {
+        console.error("Merge Error:", error);
         res.status(500).json({ error: "Lỗi khi gộp giỏ hàng" });
     }
 };

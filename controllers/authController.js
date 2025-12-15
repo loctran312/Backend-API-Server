@@ -248,8 +248,45 @@ const verifyToken = (req, res, next) => {
   }
 };
 
+// Lấy thông tin người dùng đang đăng nhập
+const getProfile = async (req, res) => {
+  try {
+    const userId = req.user.userId; // Lấy từ token đã verify
+    const [rows] = await pool.execute(
+      `SELECT ma_nguoi_dung, ho_ten, email, so_dien_thoai, dia_chi, thanh_pho
+       FROM nguoi_dung
+       WHERE ma_nguoi_dung = ?`, [userId]
+    );
+
+    if (rows.length === 0) {
+      return res.status(404).json({
+        status: 'error',
+        message: 'Không tìm thấy người dùng'
+      });
+    }
+
+    const user = rows[0];
+    res.json({
+      status: 'success',
+      user: {
+        name: user.ho_ten || '',
+        email: user.email || '',
+        phone: user.so_dien_thoai || '',
+        address: user.dia_chi || '',
+        city: user.thanh_pho || ''
+      }
+    });
+  } catch (error) {
+    res.status(500).json({
+      status: 'error',
+      message: 'Lỗi server khi lấy thông tin người dùng'
+    });
+  }
+}
+
 module.exports = {
   register,
   login,
-  verifyToken
+  verifyToken,
+  getProfile
 };
