@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: Dec 13, 2025 at 09:02 AM
+-- Generation Time: Dec 18, 2025 at 02:11 PM
 -- Server version: 9.1.0
 -- PHP Version: 8.3.14
 
@@ -127,14 +127,12 @@ CREATE TABLE IF NOT EXISTS `don_hang` (
   `tong_tien` decimal(10,2) DEFAULT NULL,
   `ghi_chu` text,
   `ma_thanhpho` int DEFAULT NULL,
-  `ma_quan` int DEFAULT NULL,
   `ma_phuong` int DEFAULT NULL,
   `dia_chi_giao_hang` varchar(255) DEFAULT NULL,
   `thoi_gian_cap_nhat` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`ma_don_hang`),
   KEY `ma_nguoi_dung` (`ma_nguoi_dung`),
   KEY `ma_thanhpho` (`ma_thanhpho`),
-  KEY `ma_quan` (`ma_quan`),
   KEY `ma_phuong` (`ma_phuong`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
@@ -155,7 +153,19 @@ CREATE TABLE IF NOT EXISTS `gio_hang` (
   KEY `ma_nguoi_dung` (`ma_nguoi_dung`),
   KEY `ma_san_pham` (`ma_san_pham`),
   KEY `gio_hang_fk_variant` (`ma_bien_the`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Dumping data for table `gio_hang`
+--
+
+INSERT INTO `gio_hang` (`ma_gio_hang`, `ma_nguoi_dung`, `ma_san_pham`, `ma_bien_the`, `so_luong`) VALUES
+(5, 1, 27, 53, 1),
+(10, 2, 27, 53, 10),
+(11, 2, 27, 54, 4),
+(12, 2, NULL, 47, 1),
+(13, 2, 28, 48, 4),
+(14, 1, NULL, 48, 4);
 
 -- --------------------------------------------------------
 
@@ -322,24 +332,9 @@ DROP TABLE IF EXISTS `phuong`;
 CREATE TABLE IF NOT EXISTS `phuong` (
   `ma_phuong` int NOT NULL AUTO_INCREMENT,
   `ten_phuong` varchar(100) NOT NULL,
-  `ma_quan` int DEFAULT NULL,
-  PRIMARY KEY (`ma_phuong`),
-  KEY `ma_quan` (`ma_quan`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `quan`
---
-
-DROP TABLE IF EXISTS `quan`;
-CREATE TABLE IF NOT EXISTS `quan` (
-  `ma_quan` int NOT NULL AUTO_INCREMENT,
-  `ten_quan` varchar(100) NOT NULL,
   `ma_thanhpho` int DEFAULT NULL,
-  PRIMARY KEY (`ma_quan`),
-  KEY `ma_thanhpho` (`ma_thanhpho`)
+  PRIMARY KEY (`ma_phuong`),
+  KEY `phuong_ibfk_thanhpho` (`ma_thanhpho`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
@@ -494,7 +489,6 @@ ALTER TABLE `chi_tiet_don_hang`
 ALTER TABLE `don_hang`
   ADD CONSTRAINT `don_hang_ibfk_1` FOREIGN KEY (`ma_nguoi_dung`) REFERENCES `nguoi_dung` (`ma_nguoi_dung`),
   ADD CONSTRAINT `don_hang_ibfk_2` FOREIGN KEY (`ma_thanhpho`) REFERENCES `thanhpho` (`ma_thanhpho`),
-  ADD CONSTRAINT `don_hang_ibfk_3` FOREIGN KEY (`ma_quan`) REFERENCES `quan` (`ma_quan`),
   ADD CONSTRAINT `don_hang_ibfk_4` FOREIGN KEY (`ma_phuong`) REFERENCES `phuong` (`ma_phuong`);
 
 --
@@ -527,13 +521,7 @@ ALTER TABLE `nhan_vien`
 -- Constraints for table `phuong`
 --
 ALTER TABLE `phuong`
-  ADD CONSTRAINT `phuong_ibfk_1` FOREIGN KEY (`ma_quan`) REFERENCES `quan` (`ma_quan`);
-
---
--- Constraints for table `quan`
---
-ALTER TABLE `quan`
-  ADD CONSTRAINT `quan_ibfk_1` FOREIGN KEY (`ma_thanhpho`) REFERENCES `thanhpho` (`ma_thanhpho`);
+  ADD CONSTRAINT `phuong_ibfk_thanhpho` FOREIGN KEY (`ma_thanhpho`) REFERENCES `thanhpho` (`ma_thanhpho`);
 
 --
 -- Constraints for table `san_pham`
