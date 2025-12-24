@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: Dec 24, 2025 at 06:57 AM
+-- Generation Time: Dec 24, 2025 at 01:18 PM
 -- Server version: 9.1.0
 -- PHP Version: 8.3.14
 
@@ -123,14 +123,13 @@ CREATE TABLE IF NOT EXISTS `don_hang` (
   `ma_don_hang` varchar(25) NOT NULL,
   `ma_nguoi_dung` int DEFAULT NULL,
   `ngay_dat_hang` datetime DEFAULT CURRENT_TIMESTAMP,
-  `trang_thai` enum('cho_xu_ly','da_thanh_toan','dang_giao','hoan_thanh','da_huy') DEFAULT 'cho_xu_ly',
+  `trang_thai` enum('cho_xu_ly','dang_xu_ly','dang_giao','hoan_thanh','da_huy') CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT 'cho_xu_ly',
   `tong_tien` decimal(10,2) DEFAULT NULL,
   `ghi_chu` text,
-  `ma_thanhpho` int DEFAULT NULL,
+  `ma_thanhpho` varchar(10) DEFAULT NULL,
   `ma_phuong` int DEFAULT NULL,
   `dia_chi_giao_hang` varchar(255) DEFAULT NULL,
   `thoi_gian_cap_nhat` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `ma_tham_chieu` varchar(64) DEFAULT NULL,
   PRIMARY KEY (`ma_don_hang`),
   KEY `ma_nguoi_dung` (`ma_nguoi_dung`),
   KEY `ma_thanhpho` (`ma_thanhpho`),
@@ -333,10 +332,41 @@ DROP TABLE IF EXISTS `phuong`;
 CREATE TABLE IF NOT EXISTS `phuong` (
   `ma_phuong` int NOT NULL AUTO_INCREMENT,
   `ten_phuong` varchar(100) NOT NULL,
-  `ma_thanhpho` int DEFAULT NULL,
+  `ma_thanhpho` varchar(10) DEFAULT NULL,
   PRIMARY KEY (`ma_phuong`),
   KEY `phuong_ibfk_thanhpho` (`ma_thanhpho`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=26 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Dumping data for table `phuong`
+--
+
+INSERT INTO `phuong` (`ma_phuong`, `ten_phuong`, `ma_thanhpho`) VALUES
+(1, 'Phường 1', 'HCM'),
+(2, 'Phường 2', 'HCM'),
+(3, 'Phường 3', 'HCM'),
+(4, 'Phường 4', 'HCM'),
+(5, 'Phường 5', 'HCM'),
+(6, 'Ba Đình', 'HN'),
+(7, 'Hoàn Kiếm', 'HN'),
+(8, 'Đống Đa', 'HN'),
+(9, 'Cầu Giấy', 'HN'),
+(10, 'Thanh Xuân', 'HN'),
+(11, 'Hải Châu 1', 'DN'),
+(12, 'Hải Châu 2', 'DN'),
+(13, 'Thanh Khê', 'DN'),
+(14, 'Sơn Trà', 'DN'),
+(15, 'Ngũ Hành Sơn', 'DN'),
+(16, 'Ninh Kiều', 'CT'),
+(17, 'Bình Thuỷ', 'CT'),
+(18, 'Cái Răng', 'CT'),
+(19, 'Ô Môn', 'CT'),
+(20, 'Thốt Nốt', 'CT'),
+(21, 'Hồng Bàng', 'HP'),
+(22, 'Lê Chân', 'HP'),
+(23, 'Ngô Quyền', 'HP'),
+(24, 'Kiến An', 'HP'),
+(25, 'Đồ Sơn', 'HP');
 
 -- --------------------------------------------------------
 
@@ -393,9 +423,37 @@ CREATE TABLE IF NOT EXISTS `san_pham_khuyen_mai` (
 
 DROP TABLE IF EXISTS `thanhpho`;
 CREATE TABLE IF NOT EXISTS `thanhpho` (
-  `ma_thanhpho` int NOT NULL AUTO_INCREMENT,
+  `ma_thanhpho` varchar(10) NOT NULL,
   `ten_thanhpho` varchar(100) NOT NULL,
   PRIMARY KEY (`ma_thanhpho`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Dumping data for table `thanhpho`
+--
+
+INSERT INTO `thanhpho` (`ma_thanhpho`, `ten_thanhpho`) VALUES
+('CT', 'Cần Thơ'),
+('DN', 'Đà Nẵng'),
+('HCM', 'Hồ Chí Minh'),
+('HN', 'Hà Nội'),
+('HP', 'Hải Phòng');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `thanh_toan`
+--
+
+DROP TABLE IF EXISTS `thanh_toan`;
+CREATE TABLE IF NOT EXISTS `thanh_toan` (
+  `ma_thanh_toan` int NOT NULL AUTO_INCREMENT,
+  `ma_don_hang` varchar(25) NOT NULL,
+  `trang_thai_thanh_toan` enum('da_thanh_toan','chua_thanh_toan') DEFAULT 'chua_thanh_toan',
+  `ma_tham_chieu` varchar(64) DEFAULT NULL,
+  `thoi_gian_tao` datetime DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`ma_thanh_toan`),
+  UNIQUE KEY `uq_thanh_toan_don_hang` (`ma_don_hang`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
@@ -517,6 +575,12 @@ ALTER TABLE `san_pham`
 ALTER TABLE `san_pham_khuyen_mai`
   ADD CONSTRAINT `san_pham_khuyen_mai_ibfk_1` FOREIGN KEY (`ma_san_pham`) REFERENCES `san_pham` (`ma_san_pham`),
   ADD CONSTRAINT `san_pham_khuyen_mai_ibfk_2` FOREIGN KEY (`ma_khuyen_mai`) REFERENCES `khuyen_mai` (`ma_khuyen_mai`);
+
+--
+-- Constraints for table `thanh_toan`
+--
+ALTER TABLE `thanh_toan`
+  ADD CONSTRAINT `thanh_toan_ibfk_1` FOREIGN KEY (`ma_don_hang`) REFERENCES `don_hang` (`ma_don_hang`) ON DELETE CASCADE;
 
 --
 -- Constraints for table `ton_kho`
