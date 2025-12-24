@@ -4,18 +4,20 @@ const path = require('path');
 const fs = require('fs');
 require('dotenv').config();
 
+// ===== ROUTES =====
 const authRoutes = require('./routes/auth');
 const userRoutes = require('./routes/users');
 const productRoutes = require('./routes/products');
 const categoryRoutes = require('./routes/categories');
 const cartRoutes = require('./routes/cart');
+const momoRoutes = require('./routes/payment');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// Cấu hình CORS
+// ===== CORS =====
 app.use(cors({
-  origin: process.env.FRONTEND_URL || '*', // Cho phép tất cả origin trong môi trường development
+  origin: process.env.FRONTEND_URL || '*',
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With']
@@ -24,13 +26,14 @@ app.use(cors({
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+// ===== UPLOADS FOLDER =====
 const uploadsDir = path.join(__dirname, 'uploads');
 if (!fs.existsSync(uploadsDir)) {
   fs.mkdirSync(uploadsDir, { recursive: true });
 }
 app.use('/uploads', express.static(uploadsDir));
 
-// Kiểm tra server
+// ===== HEALTH CHECK =====
 app.get('/health', (req, res) => {
   res.json({
     status: 'success',
@@ -39,14 +42,15 @@ app.get('/health', (req, res) => {
   });
 });
 
-// API Routes
+// ===== API ROUTES =====
 app.use('/auth', authRoutes);
 app.use('/users', userRoutes);
 app.use('/products', productRoutes);
 app.use('/categories', categoryRoutes);
 app.use('/cart', cartRoutes);
+app.use('/api/payment', momoRoutes);
 
-// 404 handler
+// ===== 404 =====
 app.use((req, res) => {
   res.status(404).json({
     status: 'error',
@@ -54,10 +58,10 @@ app.use((req, res) => {
   });
 });
 
-// Error handler
+// ===== ERROR HANDLER =====
 app.use((err, req, res, next) => {
   console.error('Error:', err);
-  // Nếu là lỗi Multer, trả về thông báo rõ ràng hơn
+
   if (err.code === 'LIMIT_UNEXPECTED_FILE') {
     return res.status(400).json({
       status: 'error',
@@ -65,6 +69,7 @@ app.use((err, req, res, next) => {
       error: process.env.NODE_ENV === 'development' ? err.message : undefined
     });
   }
+
   res.status(500).json({
     status: 'error',
     message: 'Internal server error',
@@ -72,7 +77,7 @@ app.use((err, req, res, next) => {
   });
 });
 
-// Start server
+// ===== START SERVER =====
 app.listen(PORT, () => {
   console.log(`🚀 Server đang chạy tại http://localhost:${PORT}`);
   console.log(`📡 API endpoints:`);
@@ -87,6 +92,8 @@ app.listen(PORT, () => {
   console.log(`   - POST /users (admin)`);
   console.log(`   - PUT  /users/:id (admin)`);
   console.log(`   - DELETE /users/:id (admin)`);
+  console.log(`   - POST /api/payment/momo`);
+  console.log(`   - POST /api/payment/momo/ipn`);
   console.log(`   - GET  /health`);
 });
 

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: Dec 18, 2025 at 02:11 PM
+-- Generation Time: Dec 24, 2025 at 06:57 AM
 -- Server version: 9.1.0
 -- PHP Version: 8.3.14
 
@@ -59,7 +59,7 @@ INSERT INTO `bien_the_san_pham` (`ma_bien_the`, `ma_san_pham`, `mau_sac`, `kich_
 DROP TABLE IF EXISTS `chi_tiet_don_hang`;
 CREATE TABLE IF NOT EXISTS `chi_tiet_don_hang` (
   `ma_chi_tiet` int NOT NULL AUTO_INCREMENT,
-  `ma_don_hang` int DEFAULT NULL,
+  `ma_don_hang` varchar(25) DEFAULT NULL,
   `ma_san_pham` int DEFAULT NULL,
   `ma_bien_the` int DEFAULT NULL,
   `so_luong` int DEFAULT NULL,
@@ -120,7 +120,7 @@ INSERT INTO `danh_muc` (`ma_danh_muc`, `ten_danh_muc`, `mo_ta`) VALUES
 
 DROP TABLE IF EXISTS `don_hang`;
 CREATE TABLE IF NOT EXISTS `don_hang` (
-  `ma_don_hang` int NOT NULL AUTO_INCREMENT,
+  `ma_don_hang` varchar(25) NOT NULL,
   `ma_nguoi_dung` int DEFAULT NULL,
   `ngay_dat_hang` datetime DEFAULT CURRENT_TIMESTAMP,
   `trang_thai` enum('cho_xu_ly','da_thanh_toan','dang_giao','hoan_thanh','da_huy') DEFAULT 'cho_xu_ly',
@@ -130,6 +130,7 @@ CREATE TABLE IF NOT EXISTS `don_hang` (
   `ma_phuong` int DEFAULT NULL,
   `dia_chi_giao_hang` varchar(255) DEFAULT NULL,
   `thoi_gian_cap_nhat` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `ma_tham_chieu` varchar(64) DEFAULT NULL,
   PRIMARY KEY (`ma_don_hang`),
   KEY `ma_nguoi_dung` (`ma_nguoi_dung`),
   KEY `ma_thanhpho` (`ma_thanhpho`),
@@ -160,7 +161,7 @@ CREATE TABLE IF NOT EXISTS `gio_hang` (
 --
 
 INSERT INTO `gio_hang` (`ma_gio_hang`, `ma_nguoi_dung`, `ma_san_pham`, `ma_bien_the`, `so_luong`) VALUES
-(5, 1, 27, 53, 1),
+(5, 1, 27, 53, 2),
 (10, 2, 27, 53, 10),
 (11, 2, 27, 54, 4),
 (12, 2, NULL, 47, 1),
@@ -400,26 +401,6 @@ CREATE TABLE IF NOT EXISTS `thanhpho` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `thanh_toan`
---
-
-DROP TABLE IF EXISTS `thanh_toan`;
-CREATE TABLE IF NOT EXISTS `thanh_toan` (
-  `ma_thanh_toan` int NOT NULL AUTO_INCREMENT,
-  `ma_nguoi_dung` int DEFAULT NULL,
-  `ma_don_hang` int DEFAULT NULL,
-  `so_tien` decimal(10,2) DEFAULT NULL,
-  `phuong_thuc` enum('tien_mat','chuyen_khoan','momo') DEFAULT 'tien_mat',
-  `trang_thai` enum('cho_xu_ly','thanh_cong','that_bai') DEFAULT 'cho_xu_ly',
-  `thoi_gian_thanh_toan` datetime DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (`ma_thanh_toan`),
-  KEY `ma_nguoi_dung` (`ma_nguoi_dung`),
-  KEY `ma_don_hang` (`ma_don_hang`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-
--- --------------------------------------------------------
-
---
 -- Table structure for table `ton_kho`
 --
 
@@ -536,13 +517,6 @@ ALTER TABLE `san_pham`
 ALTER TABLE `san_pham_khuyen_mai`
   ADD CONSTRAINT `san_pham_khuyen_mai_ibfk_1` FOREIGN KEY (`ma_san_pham`) REFERENCES `san_pham` (`ma_san_pham`),
   ADD CONSTRAINT `san_pham_khuyen_mai_ibfk_2` FOREIGN KEY (`ma_khuyen_mai`) REFERENCES `khuyen_mai` (`ma_khuyen_mai`);
-
---
--- Constraints for table `thanh_toan`
---
-ALTER TABLE `thanh_toan`
-  ADD CONSTRAINT `thanh_toan_ibfk_1` FOREIGN KEY (`ma_nguoi_dung`) REFERENCES `nguoi_dung` (`ma_nguoi_dung`),
-  ADD CONSTRAINT `thanh_toan_ibfk_2` FOREIGN KEY (`ma_don_hang`) REFERENCES `don_hang` (`ma_don_hang`);
 
 --
 -- Constraints for table `ton_kho`
