@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: Dec 24, 2025 at 01:18 PM
+-- Generation Time: Dec 24, 2025 at 04:39 PM
 -- Server version: 9.1.0
 -- PHP Version: 8.3.14
 
@@ -68,7 +68,21 @@ CREATE TABLE IF NOT EXISTS `chi_tiet_don_hang` (
   KEY `ma_don_hang` (`ma_don_hang`),
   KEY `ma_san_pham` (`ma_san_pham`),
   KEY `ma_bien_the` (`ma_bien_the`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Dumping data for table `chi_tiet_don_hang`
+--
+
+INSERT INTO `chi_tiet_don_hang` (`ma_chi_tiet`, `ma_don_hang`, `ma_san_pham`, `ma_bien_the`, `so_luong`, `gia`) VALUES
+(1, 'HCM-24122025-000001', 27, 53, NULL, 49000.00),
+(2, 'HCM-24122025-000001', 28, 48, NULL, 55000.00),
+(3, 'HCM-24122025-000002', 27, 54, NULL, 45000.00),
+(4, 'HCM-24122025-000002', 27, 53, NULL, 49000.00),
+(5, 'HCM-24122025-000002', 28, 48, NULL, 55000.00),
+(6, 'HCM-24122025-000002', 28, 47, NULL, 50000.00),
+(7, 'HCM-24122025-000003', 27, 53, NULL, 49000.00),
+(8, 'HCM-24122025-000004', 27, 53, NULL, 49000.00);
 
 -- --------------------------------------------------------
 
@@ -136,6 +150,16 @@ CREATE TABLE IF NOT EXISTS `don_hang` (
   KEY `ma_phuong` (`ma_phuong`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
+--
+-- Dumping data for table `don_hang`
+--
+
+INSERT INTO `don_hang` (`ma_don_hang`, `ma_nguoi_dung`, `ngay_dat_hang`, `trang_thai`, `tong_tien`, `ghi_chu`, `ma_thanhpho`, `ma_phuong`, `dia_chi_giao_hang`, `thoi_gian_cap_nhat`) VALUES
+('HCM-24122025-000001', 1, '2025-12-24 23:07:07', 'cho_xu_ly', 318000.00, 'Không', 'HCM', 1, '181 Cao Lỗ, Phường 1, Hồ Chí Minh', '2025-12-24 23:07:07'),
+('HCM-24122025-000002', 2, '2025-12-24 23:11:24', 'cho_xu_ly', 940000.00, 'Không', 'HCM', 1, '180 Cao Lỗ, Phường 1, Hồ Chí Minh', '2025-12-24 23:11:24'),
+('HCM-24122025-000003', 1, '2025-12-24 23:13:31', 'cho_xu_ly', 49000.00, 'Không', 'HCM', 1, '181 Cao Lỗ, Phường 1, Hồ Chí Minh', '2025-12-24 23:13:31'),
+('HCM-24122025-000004', 1, '2025-12-24 23:33:16', 'cho_xu_ly', 49000.00, 'Không', 'HCM', 1, '181 Cao Lỗ, Phường 1, Hồ Chí Minh', '2025-12-24 23:33:16');
+
 -- --------------------------------------------------------
 
 --
@@ -153,19 +177,7 @@ CREATE TABLE IF NOT EXISTS `gio_hang` (
   KEY `ma_nguoi_dung` (`ma_nguoi_dung`),
   KEY `ma_san_pham` (`ma_san_pham`),
   KEY `gio_hang_fk_variant` (`ma_bien_the`)
-) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-
---
--- Dumping data for table `gio_hang`
---
-
-INSERT INTO `gio_hang` (`ma_gio_hang`, `ma_nguoi_dung`, `ma_san_pham`, `ma_bien_the`, `so_luong`) VALUES
-(5, 1, 27, 53, 2),
-(10, 2, 27, 53, 10),
-(11, 2, 27, 54, 4),
-(12, 2, NULL, 47, 1),
-(13, 2, 28, 48, 4),
-(14, 1, NULL, 48, 4);
+) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
 
@@ -454,7 +466,17 @@ CREATE TABLE IF NOT EXISTS `thanh_toan` (
   `thoi_gian_tao` datetime DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`ma_thanh_toan`),
   UNIQUE KEY `uq_thanh_toan_don_hang` (`ma_don_hang`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Dumping data for table `thanh_toan`
+--
+
+INSERT INTO `thanh_toan` (`ma_thanh_toan`, `ma_don_hang`, `trang_thai_thanh_toan`, `ma_tham_chieu`, `thoi_gian_tao`) VALUES
+(1, 'HCM-24122025-000001', '', NULL, '2025-12-24 23:07:07'),
+(2, 'HCM-24122025-000002', '', NULL, '2025-12-24 23:11:24'),
+(3, 'HCM-24122025-000003', '', NULL, '2025-12-24 23:13:31'),
+(4, 'HCM-24122025-000004', '', NULL, '2025-12-24 23:33:16');
 
 -- --------------------------------------------------------
 
