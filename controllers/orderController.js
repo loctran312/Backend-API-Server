@@ -89,6 +89,17 @@ exports.createOrder = async (req, res) => {
                     item.price
                 ]
             );
+
+            await connection.query(
+                `UPDATE ton_kho
+                SET so_luong_ton = so_luong_ton - ?
+                WHERE ma_bien_the = ? AND so_luong_ton >= ?`,
+                [
+                    item.quantity,
+                    item.variantId,
+                    item.quantity
+                ]
+            );
         }
 
         // Insert bảng thanh_toan
@@ -156,49 +167,74 @@ exports.getAllOrders = async (req, res) => {
     }
 }
 
-// lay danh sach don hang cua nguoi dung
+// Lấy danh sách đơn hàng của người dùng
 exports.getUserOrders = async (req, res) => {
     try {
-        const userId = req.user.userId; // Lấy từ Token thật
+        const userId = req.user.userId; // Lấy ID từ token
         const [rows] = await db.query(
-            `SELECT d.*, tt.trang_thai_thanh_toan 
-             FROM don_hang d
-             LEFT JOIN nguoi_dung u ON d.ma_nguoi_dung = u.ma_nguoi_dung
-             LEFT JOIN thanh_toan tt ON d.ma_don_hang = tt.ma_don_hang
-             WHERE d.ma_nguoi_dung = ?
-             ORDER BY d.ngay_dat_hang DESC `,[userId]
+            `SELECT ma_don_hang, ngay_dat_hang, tong_tien, trang_thai 
+             FROM don_hang 
+             WHERE ma_nguoi_dung = ? 
+             ORDER BY ngay_dat_hang DESC`,
+            [userId]
         );
         res.json({
             status: 'success',
             data: rows
         });
-    } catch (err) {
+    } catch (error) {
+        console.error(error);
         res.status(500).json({
             status: "error",
-            message: "Lỗi lấy danh sách đơn hàng của người dùng"
+            message: "Lỗi lấy danh sách đơn hàng"
         });
     }
 }
 
-// lay chi tiet don hang 
-exports.getOrderDetails = async (req, res) => {
+// Lấy chi tiết đơn hàng
+exports.getOrderDetail = async (req, res) => {
     try {
         const { orderId } = req.params;
-        const [rows] = await db.query(
-            `SELECT ct.*, sp.ten_san_pham, bt.ten_bien_the 
-             FROM chi_tiet_don_hang ct
-             LEFT JOIN san_pham sp ON ct.ma_san_pham = sp.ma_san_pham
-             LEFT JOIN bien_the bt ON ct.ma_bien_the = bt.ma_bien_the
-             WHERE ct.ma_don_hang = ?`, [orderId]
+        const userId = req.user.userId;
+
+        // Lấy thông tin đơn hàng
+        const [orders] = await db.query(
+            `SELECT d.*, tt.trang_thai_thanh_toan, u.ho_ten, u.email, u.so_dien_thoai
+             FROM don_hang d
+             LEFT JOIN thanh_toan tt ON d.ma_don_hang = tt.ma_don_hang
+             LEFT JOIN nguoi_dung u ON d.ma_nguoi_dung = u.ma_nguoi_dung
+             WHERE d.ma_don_hang = ? AND d.ma_nguoi_dung = ?`,
+            [orderId, userId]
         );
+
+        if (orders.length === 0) {
+            return res.status(404).json({ status: 'error', message: 'Không tìm thấy đơn hàng' });
+        }
+
+        const order = orders[0];
+
+        // Lấy danh sách sản phẩm trong đơn
+        const [items] = await db.query(
+            `SELECT c.*, s.ten_san_pham, s.hinh_anh_url, b.mau_sac, b.kich_co, b.url_hinh_anh_bien_the 
+             FROM chi_tiet_don_hang c
+             JOIN san_pham s ON c.ma_san_pham = s.ma_san_pham
+             LEFT JOIN bien_the_san_pham b ON c.ma_bien_the = b.ma_bien_the
+             WHERE c.ma_don_hang = ?`,
+            [orderId]
+        );
+
         res.json({
             status: 'success',
-            data: rows
+            data: {
+                order: order,
+                items: items
+            }
         });
-    } catch (err) {
-        res.status(500).json({
-            status: "error",
-            message: "Lỗi lấy chi tiết đơn hàng"
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ 
+            status: 'error', 
+            message: 'Lỗi lấy chi tiết đơn hàng' 
         });
     }
 }
