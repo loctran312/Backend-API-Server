@@ -497,6 +497,19 @@ async function updateProduct(req, res) {
 		if (!isAdmin(req)) return res.status(403).json({ status: 'error', message: 'Forbidden' });
 
 		const { id } = req.params;
+
+		// Kiểm tra xem sản phẩm đã có trong đơn hàng nào chưa
+		const [orderItems] = await pool.execute(
+			'SELECT ma_don_hang FROM chi_tiet_don_hang WHERE ma_san_pham = ? LIMIT 1', 
+			[id]
+		);
+		if (orderItems.length > 0) {
+			return res.status(400).json({ 
+				status: 'error', 
+				message: 'Không thể chỉnh sửa sản phẩm này vì đã có đơn hàng liên quan!' 
+			});
+		}
+
 		const { name, price, description, categoryId, productType, variants } = req.body;
 		const [rows] = await pool.execute('SELECT * FROM san_pham WHERE ma_san_pham = ?', [id]);
 		if (!rows.length) return res.status(404).json({ status: 'error', message: 'Không tìm thấy sản phẩm' });
