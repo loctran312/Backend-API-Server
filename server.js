@@ -11,6 +11,8 @@ const productRoutes = require('./routes/products');
 const categoryRoutes = require('./routes/categories');
 const cartRoutes = require('./routes/cart');
 const momoRoutes = require('./routes/payment');
+const locationRoutes = require('./routes/locations');
+const orderRoutes = require('./routes/orders');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -49,6 +51,8 @@ app.use('/products', productRoutes);
 app.use('/categories', categoryRoutes);
 app.use('/cart', cartRoutes);
 app.use('/api/payment', momoRoutes);
+app.use('/locations', locationRoutes);
+app.use('/orders', orderRoutes);
 
 // ===== 404 =====
 app.use((req, res) => {

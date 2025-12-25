@@ -137,7 +137,7 @@ async function listProducts(req, res) {
             sql += ` AND sp.ma_danh_muc = ?`;
             params.push(categoryId);
         }
-
+		
 		// Thêm sắp xếp
         sql += ` ORDER BY sp.thoi_gian_tao DESC`;
 		
