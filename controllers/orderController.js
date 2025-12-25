@@ -134,7 +134,7 @@ exports.createOrder = async (req, res) => {
     }
 };
 
-// Lấy danh sách đơn hàng
+// Lấy danh sách đơn hàng admin
 exports.getAllOrders = async (req, res) => {
     try {
         const [rows] = await db.query(
@@ -152,6 +152,53 @@ exports.getAllOrders = async (req, res) => {
         res.status(500).json({
             status: "error",
             message: "Lỗi lấy danh sách đơn hàng"
+        });
+    }
+}
+
+// lay danh sach don hang cua nguoi dung
+exports.getUserOrders = async (req, res) => {
+    try {
+        const userId = req.user.userId; // Lấy từ Token thật
+        const [rows] = await db.query(
+            `SELECT d.*, tt.trang_thai_thanh_toan 
+             FROM don_hang d
+             LEFT JOIN nguoi_dung u ON d.ma_nguoi_dung = u.ma_nguoi_dung
+             LEFT JOIN thanh_toan tt ON d.ma_don_hang = tt.ma_don_hang
+             WHERE d.ma_nguoi_dung = ?
+             ORDER BY d.ngay_dat_hang DESC `,[userId]
+        );
+        res.json({
+            status: 'success',
+            data: rows
+        });
+    } catch (err) {
+        res.status(500).json({
+            status: "error",
+            message: "Lỗi lấy danh sách đơn hàng của người dùng"
+        });
+    }
+}
+
+// lay chi tiet don hang 
+exports.getOrderDetails = async (req, res) => {
+    try {
+        const { orderId } = req.params;
+        const [rows] = await db.query(
+            `SELECT ct.*, sp.ten_san_pham, bt.ten_bien_the 
+             FROM chi_tiet_don_hang ct
+             LEFT JOIN san_pham sp ON ct.ma_san_pham = sp.ma_san_pham
+             LEFT JOIN bien_the bt ON ct.ma_bien_the = bt.ma_bien_the
+             WHERE ct.ma_don_hang = ?`, [orderId]
+        );
+        res.json({
+            status: 'success',
+            data: rows
+        });
+    } catch (err) {
+        res.status(500).json({
+            status: "error",
+            message: "Lỗi lấy chi tiết đơn hàng"
         });
     }
 }
