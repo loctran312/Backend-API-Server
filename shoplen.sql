@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: Dec 24, 2025 at 04:39 PM
+-- Generation Time: Dec 31, 2025 at 03:20 PM
 -- Server version: 9.1.0
 -- PHP Version: 8.3.14
 
@@ -36,19 +36,20 @@ CREATE TABLE IF NOT EXISTS `bien_the_san_pham` (
   `chat_lieu` varchar(100) DEFAULT NULL,
   `url_hinh_anh_bien_the` varchar(255) NOT NULL,
   `gia_them` decimal(10,2) DEFAULT '0.00',
+  `dang_ban` tinyint(1) NOT NULL DEFAULT '1',
   PRIMARY KEY (`ma_bien_the`),
   KEY `ma_san_pham` (`ma_san_pham`)
-) ENGINE=InnoDB AUTO_INCREMENT=55 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=58 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Dumping data for table `bien_the_san_pham`
 --
 
-INSERT INTO `bien_the_san_pham` (`ma_bien_the`, `ma_san_pham`, `mau_sac`, `kich_co`, `chat_lieu`, `url_hinh_anh_bien_the`, `gia_them`) VALUES
-(47, 28, 'Hồng Wool', '100g', 'Wool', 'http://localhost:3000/uploads/collection1-1765002786480-920104436.png', 0.00),
-(48, 28, 'Đỏ Wool', '100g', 'Wool', 'http://localhost:3000/uploads/down4-1765002786484-670254321.png', 55000.00),
-(53, 27, 'Hồng Pastel', '100g', 'Cotton', 'http://localhost:3000/uploads/item1-1764770677147-827675066.png', 49000.00),
-(54, 27, 'Xanh Pastel', '100g', 'Cotton', 'http://localhost:3000/uploads/collection2-1764770677152-863891815.png', 0.00);
+INSERT INTO `bien_the_san_pham` (`ma_bien_the`, `ma_san_pham`, `mau_sac`, `kich_co`, `chat_lieu`, `url_hinh_anh_bien_the`, `gia_them`, `dang_ban`) VALUES
+(47, 28, 'Hồng Wool', '100g', 'Wool', 'http://localhost:3000/uploads/collection1-1765002786480-920104436.png', 0.00, 1),
+(48, 28, 'Đỏ Wool', '100g', 'Wool', 'http://localhost:3000/uploads/down4-1765002786484-670254321.png', 55000.00, 1),
+(53, 27, 'Hồng Pastel', '100g', 'Cotton', 'http://localhost:3000/uploads/item1-1764770677147-827675066.png', 49000.00, 1),
+(54, 27, 'Xanh Pastel', '100g', 'Cotton', 'http://localhost:3000/uploads/collection2-1764770677152-863891815.png', 0.00, 1);
 
 -- --------------------------------------------------------
 
@@ -68,22 +69,11 @@ CREATE TABLE IF NOT EXISTS `chi_tiet_don_hang` (
   KEY `ma_don_hang` (`ma_don_hang`),
   KEY `ma_san_pham` (`ma_san_pham`),
   KEY `ma_bien_the` (`ma_bien_the`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=29 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Dumping data for table `chi_tiet_don_hang`
 --
-
-INSERT INTO `chi_tiet_don_hang` (`ma_chi_tiet`, `ma_don_hang`, `ma_san_pham`, `ma_bien_the`, `so_luong`, `gia`) VALUES
-(1, 'HCM-24122025-000001', 27, 53, NULL, 49000.00),
-(2, 'HCM-24122025-000001', 28, 48, NULL, 55000.00),
-(3, 'HCM-24122025-000002', 27, 54, NULL, 45000.00),
-(4, 'HCM-24122025-000002', 27, 53, NULL, 49000.00),
-(5, 'HCM-24122025-000002', 28, 48, NULL, 55000.00),
-(6, 'HCM-24122025-000002', 28, 47, NULL, 50000.00),
-(7, 'HCM-24122025-000003', 27, 53, NULL, 49000.00),
-(8, 'HCM-24122025-000004', 27, 53, NULL, 49000.00);
-
 -- --------------------------------------------------------
 
 --
@@ -154,12 +144,6 @@ CREATE TABLE IF NOT EXISTS `don_hang` (
 -- Dumping data for table `don_hang`
 --
 
-INSERT INTO `don_hang` (`ma_don_hang`, `ma_nguoi_dung`, `ngay_dat_hang`, `trang_thai`, `tong_tien`, `ghi_chu`, `ma_thanhpho`, `ma_phuong`, `dia_chi_giao_hang`, `thoi_gian_cap_nhat`) VALUES
-('HCM-24122025-000001', 1, '2025-12-24 23:07:07', 'cho_xu_ly', 318000.00, 'Không', 'HCM', 1, '181 Cao Lỗ, Phường 1, Hồ Chí Minh', '2025-12-24 23:07:07'),
-('HCM-24122025-000002', 2, '2025-12-24 23:11:24', 'cho_xu_ly', 940000.00, 'Không', 'HCM', 1, '180 Cao Lỗ, Phường 1, Hồ Chí Minh', '2025-12-24 23:11:24'),
-('HCM-24122025-000003', 1, '2025-12-24 23:13:31', 'cho_xu_ly', 49000.00, 'Không', 'HCM', 1, '181 Cao Lỗ, Phường 1, Hồ Chí Minh', '2025-12-24 23:13:31'),
-('HCM-24122025-000004', 1, '2025-12-24 23:33:16', 'cho_xu_ly', 49000.00, 'Không', 'HCM', 1, '181 Cao Lỗ, Phường 1, Hồ Chí Minh', '2025-12-24 23:33:16');
-
 -- --------------------------------------------------------
 
 --
@@ -177,7 +161,11 @@ CREATE TABLE IF NOT EXISTS `gio_hang` (
   KEY `ma_nguoi_dung` (`ma_nguoi_dung`),
   KEY `ma_san_pham` (`ma_san_pham`),
   KEY `gio_hang_fk_variant` (`ma_bien_the`)
-) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=40 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Dumping data for table `gio_hang`
+--
 
 -- --------------------------------------------------------
 
@@ -193,7 +181,7 @@ CREATE TABLE IF NOT EXISTS `hinh_anh_bien_the` (
   `thu_tu` int DEFAULT '0',
   PRIMARY KEY (`ma_hinh_anh`),
   KEY `ma_bien_the` (`ma_bien_the`)
-) ENGINE=InnoDB AUTO_INCREMENT=63 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=66 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Dumping data for table `hinh_anh_bien_the`
@@ -400,7 +388,7 @@ CREATE TABLE IF NOT EXISTS `san_pham` (
   PRIMARY KEY (`ma_san_pham`),
   KEY `ma_danh_muc` (`ma_danh_muc`),
   KEY `ma_loai` (`ma_loai`)
-) ENGINE=InnoDB AUTO_INCREMENT=29 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=30 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Dumping data for table `san_pham`
@@ -461,22 +449,17 @@ DROP TABLE IF EXISTS `thanh_toan`;
 CREATE TABLE IF NOT EXISTS `thanh_toan` (
   `ma_thanh_toan` int NOT NULL AUTO_INCREMENT,
   `ma_don_hang` varchar(25) NOT NULL,
-  `trang_thai_thanh_toan` enum('da_thanh_toan','chua_thanh_toan') DEFAULT 'chua_thanh_toan',
+  `phuong_thuc_thanh_toan` enum('COD','MOMO') NOT NULL DEFAULT 'COD',
+  `trang_thai_thanh_toan` enum('da_thanh_toan','chua_thanh_toan','dang_cho') CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT 'chua_thanh_toan',
   `ma_tham_chieu` varchar(64) DEFAULT NULL,
   `thoi_gian_tao` datetime DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`ma_thanh_toan`),
   UNIQUE KEY `uq_thanh_toan_don_hang` (`ma_don_hang`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Dumping data for table `thanh_toan`
 --
-
-INSERT INTO `thanh_toan` (`ma_thanh_toan`, `ma_don_hang`, `trang_thai_thanh_toan`, `ma_tham_chieu`, `thoi_gian_tao`) VALUES
-(1, 'HCM-24122025-000001', '', NULL, '2025-12-24 23:07:07'),
-(2, 'HCM-24122025-000002', '', NULL, '2025-12-24 23:11:24'),
-(3, 'HCM-24122025-000003', '', NULL, '2025-12-24 23:13:31'),
-(4, 'HCM-24122025-000004', '', NULL, '2025-12-24 23:33:16');
 
 -- --------------------------------------------------------
 
@@ -495,17 +478,17 @@ CREATE TABLE IF NOT EXISTS `ton_kho` (
   KEY `ma_kho` (`ma_kho`),
   KEY `ma_san_pham` (`ma_san_pham`),
   KEY `ma_bien_the` (`ma_bien_the`)
-) ENGINE=InnoDB AUTO_INCREMENT=30 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=33 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Dumping data for table `ton_kho`
 --
 
 INSERT INTO `ton_kho` (`ma_ton`, `ma_kho`, `ma_san_pham`, `ma_bien_the`, `so_luong_ton`) VALUES
-(22, 1, 28, 47, 90),
-(23, 1, 28, 48, 95),
-(28, 1, 27, 53, 99),
-(29, 1, 27, 54, 98);
+(22, 1, 28, 47, 999),
+(23, 1, 28, 48, 999),
+(28, 1, 27, 53, 999),
+(29, 1, 27, 54, 999);
 
 -- --------------------------------------------------------
 

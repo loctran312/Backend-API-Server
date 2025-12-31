@@ -16,4 +16,10 @@ router.get('/user-orders', verifyToken, orderController.getUserOrders);
 // API lấy thông tin đơn hàng
 router.get('/:orderId', verifyToken, orderController.getOrderDetail);
 
+// API cập nhật trạng thái đơn hàng (Admin)
+router.put('/:orderId/status', verifyToken, orderController.updateOrderStatus);
+
+// API hủy đơn hàng (User)
+router.put('/:orderId/cancel', verifyToken, orderController.cancelOrder);
+
 module.exports = router;
