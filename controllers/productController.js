@@ -295,12 +295,6 @@ async function createProduct(req, res) {
 	try {
 		if (!isAdmin(req)) return res.status(403).json({ status: 'error', message: 'Forbidden' });
 
-		// Debug: log request data
-		console.log('createProduct - req.body:', req.body);
-		console.log('createProduct - req.files:', req.files);
-		console.log('createProduct - req.body type:', typeof req.body);
-		console.log('createProduct - req.body keys:', req.body ? Object.keys(req.body) : 'req.body is null/undefined');
-
 		// Đảm bảo req.body tồn tại
 		if (!req.body) {
 			return res.status(400).json({ status: 'error', message: 'Request body không hợp lệ' });
@@ -388,10 +382,7 @@ async function createProduct(req, res) {
 			let variantsData;
 			try {
 				variantsData = typeof variants === 'string' ? JSON.parse(variants) : variants;
-				console.log('Parsed variants:', variantsData);
 			} catch (e) {
-				console.warn('Lỗi parse variants:', e.message);
-				console.warn('Variants raw:', variants);
 				variantsData = [];
 			}
 

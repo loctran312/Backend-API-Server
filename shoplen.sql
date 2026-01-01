@@ -46,10 +46,10 @@ CREATE TABLE IF NOT EXISTS `bien_the_san_pham` (
 --
 
 INSERT INTO `bien_the_san_pham` (`ma_bien_the`, `ma_san_pham`, `mau_sac`, `kich_co`, `chat_lieu`, `url_hinh_anh_bien_the`, `gia_them`, `dang_ban`) VALUES
-(47, 28, 'Hồng Wool', '100g', 'Wool', 'http://localhost:3000/uploads/collection1-1765002786480-920104436.png', 0.00, 1),
-(48, 28, 'Đỏ Wool', '100g', 'Wool', 'http://localhost:3000/uploads/down4-1765002786484-670254321.png', 55000.00, 1),
-(53, 27, 'Hồng Pastel', '100g', 'Cotton', 'http://localhost:3000/uploads/item1-1764770677147-827675066.png', 49000.00, 1),
-(54, 27, 'Xanh Pastel', '100g', 'Cotton', 'http://localhost:3000/uploads/collection2-1764770677152-863891815.png', 0.00, 1);
+(47, 28, 'Hồng Wool', '100gr', 'Wool', 'http://localhost:3000/uploads/collection1-1765002786480-920104436.png', 0.00, 1),
+(48, 28, 'Đỏ Wool', '100gr', 'Wool', 'http://localhost:3000/uploads/down4-1765002786484-670254321.png', 55000.00, 1),
+(53, 27, 'Hồng Pastel', '100gr', 'Cotton', 'http://localhost:3000/uploads/item1-1764770677147-827675066.png', 49000.00, 1),
+(54, 27, 'Xanh Pastel', '100gr', 'Cotton', 'http://localhost:3000/uploads/collection2-1764770677152-863891815.png', 0.00, 1);
 
 -- --------------------------------------------------------
 
