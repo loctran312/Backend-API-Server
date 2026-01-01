@@ -9,7 +9,8 @@ const {
 	getProductById,
 	createProduct,
 	updateProduct,
-	deleteProduct
+	deleteProduct,
+	updateStatusProduct
 } = require('../controllers/productController');
 
 function requireAdmin(req, res, next) {
@@ -26,6 +27,7 @@ router.post('/', verifyToken, requireAdmin, uploadAny.any(), createProduct);
 
 router.put('/:id', verifyToken, requireAdmin, uploadAny.any(), updateProduct);
 router.delete('/:id', verifyToken, requireAdmin, deleteProduct);
+router.put('/:id/status', verifyToken, requireAdmin, updateStatusProduct);
 
 module.exports = router;
 

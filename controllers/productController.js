@@ -102,6 +102,7 @@ async function mapProduct(row, req) {
 		imageUrl: mainImageUrl,
 		images: imageList,
 		type: row.productType || '',
+		status: row.status === 1,
 		createdAt: row.createdAt,
 		variants: row.variants || []
 	};
@@ -112,6 +113,7 @@ async function listProducts(req, res) {
 		const { search, categoryId } = req.query;
         // Xây dựng câu truy vấn SQL động
         let sql = `SELECT sp.ma_san_pham AS id,
+						sp.trang_thai_san_pham AS status,
                         sp.ten_san_pham AS name,
                         sp.gia AS price,
                         sp.mo_ta AS description,
@@ -213,6 +215,7 @@ async function getProductById(req, res) {
 		// Query từ bảng san_pham (id là ma_san_pham)
 		const [rows] = await pool.execute(
 			`SELECT sp.ma_san_pham AS id,
+					sp.trang_thai_san_pham AS status,
 			        sp.ten_san_pham AS name,
 			        sp.gia AS price,
 			        sp.mo_ta AS description,
@@ -361,17 +364,19 @@ async function createProduct(req, res) {
 			maLoai = 1; // Default: Len
 		}
 
+		const trangThaiSP =1;
 		// Tạo sản phẩm
 		const [result] = await pool.execute(
-			`INSERT INTO san_pham (ma_danh_muc, ma_loai, ten_san_pham, gia, mo_ta, hinh_anh_url)
-			 VALUES (?, ?, ?, ?, ?, ?)`,
+			`INSERT INTO san_pham (ma_danh_muc, ma_loai, ten_san_pham, gia, mo_ta, hinh_anh_url, trang_thai_san_pham)
+			 VALUES (?, ?, ?, ?, ?, ?, ?)`,
 			[
 				category,
 				maLoai,
 				name.trim(),
 				numericPrice,
 				description || '',
-				mainImagePath
+				mainImagePath,
+				trangThaiSP
 			]
 		);
 
@@ -777,6 +782,23 @@ async function deleteProduct(req, res) {
 	}
 }
 
+async function updateStatusProduct(req, res) {
+	try {
+		if (!isAdmin(req)) return res.status(403).json({ status: 'error', message: 'Forbidden' });
+		const { id } = req.params;
+		const { status } = req.body;
+		const numericStatus = status ? 1 : 0;
+		await pool.execute(
+			'UPDATE san_pham SET trang_thai_san_pham = ? WHERE ma_san_pham = ?',
+			[numericStatus, id]
+		);
+		res.json({ status: 'success', message: 'Cập nhật trạng thái sản phẩm thành công' });
+	} catch (err) {
+		console.error('updateStatusProduct error:', err);
+		res.status(500).json({ status: 'error', message: 'Không thể cập nhật trạng thái sản phẩm' });
+	}
+}
+
 module.exports = {
 	upload,
 	uploadAny,
@@ -785,6 +807,7 @@ module.exports = {
 	getProductById,
 	createProduct,
 	updateProduct,
-	deleteProduct
+	deleteProduct,
+	updateStatusProduct
 };
 
