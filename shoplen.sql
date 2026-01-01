@@ -2,10 +2,10 @@
 -- version 5.2.1
 -- https://www.phpmyadmin.net/
 --
--- Host: 127.0.0.1:3306
--- Generation Time: Dec 31, 2025 at 03:20 PM
--- Server version: 9.1.0
--- PHP Version: 8.3.14
+-- Máy chủ: 127.0.0.1:3306
+-- Thời gian đã tạo: Th1 01, 2026 lúc 03:05 PM
+-- Phiên bản máy phục vụ: 9.1.0
+-- Phiên bản PHP: 8.3.14
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -18,13 +18,13 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `shoplen`
+-- Cơ sở dữ liệu: `shoplen`
 --
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `bien_the_san_pham`
+-- Cấu trúc bảng cho bảng `bien_the_san_pham`
 --
 
 DROP TABLE IF EXISTS `bien_the_san_pham`;
@@ -36,25 +36,24 @@ CREATE TABLE IF NOT EXISTS `bien_the_san_pham` (
   `chat_lieu` varchar(100) DEFAULT NULL,
   `url_hinh_anh_bien_the` varchar(255) NOT NULL,
   `gia_them` decimal(10,2) DEFAULT '0.00',
-  `dang_ban` tinyint(1) NOT NULL DEFAULT '1',
   PRIMARY KEY (`ma_bien_the`),
   KEY `ma_san_pham` (`ma_san_pham`)
-) ENGINE=InnoDB AUTO_INCREMENT=58 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=63 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
--- Dumping data for table `bien_the_san_pham`
+-- Đang đổ dữ liệu cho bảng `bien_the_san_pham`
 --
 
-INSERT INTO `bien_the_san_pham` (`ma_bien_the`, `ma_san_pham`, `mau_sac`, `kich_co`, `chat_lieu`, `url_hinh_anh_bien_the`, `gia_them`, `dang_ban`) VALUES
-(47, 28, 'Hồng Wool', '100gr', 'Wool', 'http://localhost:3000/uploads/collection1-1765002786480-920104436.png', 0.00, 1),
-(48, 28, 'Đỏ Wool', '100gr', 'Wool', 'http://localhost:3000/uploads/down4-1765002786484-670254321.png', 55000.00, 1),
-(53, 27, 'Hồng Pastel', '100gr', 'Cotton', 'http://localhost:3000/uploads/item1-1764770677147-827675066.png', 49000.00, 1),
-(54, 27, 'Xanh Pastel', '100gr', 'Cotton', 'http://localhost:3000/uploads/collection2-1764770677152-863891815.png', 0.00, 1);
+INSERT INTO `bien_the_san_pham` (`ma_bien_the`, `ma_san_pham`, `mau_sac`, `kich_co`, `chat_lieu`, `url_hinh_anh_bien_the`, `gia_them`) VALUES
+(47, 28, 'Hồng Wool', '100gr', 'Wool', 'http://localhost:3000/uploads/collection1-1765002786480-920104436.png', 0.00),
+(48, 28, 'Đỏ Wool', '100gr', 'Wool', 'http://localhost:3000/uploads/down4-1765002786484-670254321.png', 55000.00),
+(60, 27, 'Hồng Pastel', '125gr', 'Cotton', 'http://localhost:3000/uploads/item1-1764770677147-827675066.png', 49000.00),
+(61, 27, 'Xanh Pastel', '175gr', 'Cotton', 'http://localhost:3000/uploads/collection2-1764770677152-863891815.png', 0.00);
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `chi_tiet_don_hang`
+-- Cấu trúc bảng cho bảng `chi_tiet_don_hang`
 --
 
 DROP TABLE IF EXISTS `chi_tiet_don_hang`;
@@ -71,13 +70,10 @@ CREATE TABLE IF NOT EXISTS `chi_tiet_don_hang` (
   KEY `ma_bien_the` (`ma_bien_the`)
 ) ENGINE=InnoDB AUTO_INCREMENT=29 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
---
--- Dumping data for table `chi_tiet_don_hang`
---
 -- --------------------------------------------------------
 
 --
--- Table structure for table `danh_gia`
+-- Cấu trúc bảng cho bảng `danh_gia`
 --
 
 DROP TABLE IF EXISTS `danh_gia`;
@@ -96,7 +92,7 @@ CREATE TABLE IF NOT EXISTS `danh_gia` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `danh_muc`
+-- Cấu trúc bảng cho bảng `danh_muc`
 --
 
 DROP TABLE IF EXISTS `danh_muc`;
@@ -108,7 +104,7 @@ CREATE TABLE IF NOT EXISTS `danh_muc` (
 ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
--- Dumping data for table `danh_muc`
+-- Đang đổ dữ liệu cho bảng `danh_muc`
 --
 
 INSERT INTO `danh_muc` (`ma_danh_muc`, `ten_danh_muc`, `mo_ta`) VALUES
@@ -119,7 +115,7 @@ INSERT INTO `danh_muc` (`ma_danh_muc`, `ten_danh_muc`, `mo_ta`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `don_hang`
+-- Cấu trúc bảng cho bảng `don_hang`
 --
 
 DROP TABLE IF EXISTS `don_hang`;
@@ -140,14 +136,10 @@ CREATE TABLE IF NOT EXISTS `don_hang` (
   KEY `ma_phuong` (`ma_phuong`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
---
--- Dumping data for table `don_hang`
---
-
 -- --------------------------------------------------------
 
 --
--- Table structure for table `gio_hang`
+-- Cấu trúc bảng cho bảng `gio_hang`
 --
 
 DROP TABLE IF EXISTS `gio_hang`;
@@ -161,16 +153,21 @@ CREATE TABLE IF NOT EXISTS `gio_hang` (
   KEY `ma_nguoi_dung` (`ma_nguoi_dung`),
   KEY `ma_san_pham` (`ma_san_pham`),
   KEY `gio_hang_fk_variant` (`ma_bien_the`)
-) ENGINE=InnoDB AUTO_INCREMENT=40 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=43 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
--- Dumping data for table `gio_hang`
+-- Đang đổ dữ liệu cho bảng `gio_hang`
 --
+
+INSERT INTO `gio_hang` (`ma_gio_hang`, `ma_nguoi_dung`, `ma_san_pham`, `ma_bien_the`, `so_luong`) VALUES
+(40, 1, NULL, NULL, 2),
+(41, 1, NULL, 47, 3),
+(42, 1, NULL, NULL, 1);
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `hinh_anh_bien_the`
+-- Cấu trúc bảng cho bảng `hinh_anh_bien_the`
 --
 
 DROP TABLE IF EXISTS `hinh_anh_bien_the`;
@@ -181,24 +178,24 @@ CREATE TABLE IF NOT EXISTS `hinh_anh_bien_the` (
   `thu_tu` int DEFAULT '0',
   PRIMARY KEY (`ma_hinh_anh`),
   KEY `ma_bien_the` (`ma_bien_the`)
-) ENGINE=InnoDB AUTO_INCREMENT=66 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=73 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
--- Dumping data for table `hinh_anh_bien_the`
+-- Đang đổ dữ liệu cho bảng `hinh_anh_bien_the`
 --
 
 INSERT INTO `hinh_anh_bien_the` (`ma_hinh_anh`, `ma_bien_the`, `url_hinh_anh`, `thu_tu`) VALUES
 (51, 47, 'http://localhost:3000/uploads/item4-1765002786481-507588849.png', 1),
 (52, 47, 'http://localhost:3000/uploads/collection1-1765002786480-920104436.png', 0),
 (53, 48, 'http://localhost:3000/uploads/down4-1765002786484-670254321.png', 0),
-(60, 53, 'http://localhost:3000/uploads/item1-1764770677147-827675066.png', 0),
-(61, 53, 'http://localhost:3000/uploads/collection4-1764770677150-773351408.png', 1),
-(62, 54, 'http://localhost:3000/uploads/collection2-1764770677152-863891815.png', 0);
+(69, 60, 'http://localhost:3000/uploads/item1-1764770677147-827675066.png', 0),
+(70, 60, 'http://localhost:3000/uploads/collection4-1764770677150-773351408.png', 1),
+(71, 61, 'http://localhost:3000/uploads/collection2-1764770677152-863891815.png', 0);
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `hinh_anh_san_pham`
+-- Cấu trúc bảng cho bảng `hinh_anh_san_pham`
 --
 
 DROP TABLE IF EXISTS `hinh_anh_san_pham`;
@@ -214,7 +211,7 @@ CREATE TABLE IF NOT EXISTS `hinh_anh_san_pham` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `kho`
+-- Cấu trúc bảng cho bảng `kho`
 --
 
 DROP TABLE IF EXISTS `kho`;
@@ -226,7 +223,7 @@ CREATE TABLE IF NOT EXISTS `kho` (
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
--- Dumping data for table `kho`
+-- Đang đổ dữ liệu cho bảng `kho`
 --
 
 INSERT INTO `kho` (`ma_kho`, `ten_kho`, `dia_chi`) VALUES
@@ -235,7 +232,7 @@ INSERT INTO `kho` (`ma_kho`, `ten_kho`, `dia_chi`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `khuyen_mai`
+-- Cấu trúc bảng cho bảng `khuyen_mai`
 --
 
 DROP TABLE IF EXISTS `khuyen_mai`;
@@ -251,7 +248,7 @@ CREATE TABLE IF NOT EXISTS `khuyen_mai` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `loai_san_pham`
+-- Cấu trúc bảng cho bảng `loai_san_pham`
 --
 
 DROP TABLE IF EXISTS `loai_san_pham`;
@@ -263,7 +260,7 @@ CREATE TABLE IF NOT EXISTS `loai_san_pham` (
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
--- Dumping data for table `loai_san_pham`
+-- Đang đổ dữ liệu cho bảng `loai_san_pham`
 --
 
 INSERT INTO `loai_san_pham` (`ma_loai`, `ten_loai`, `mo_ta`) VALUES
@@ -274,7 +271,7 @@ INSERT INTO `loai_san_pham` (`ma_loai`, `ten_loai`, `mo_ta`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `nguoi_dung`
+-- Cấu trúc bảng cho bảng `nguoi_dung`
 --
 
 DROP TABLE IF EXISTS `nguoi_dung`;
@@ -297,7 +294,7 @@ CREATE TABLE IF NOT EXISTS `nguoi_dung` (
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
--- Dumping data for table `nguoi_dung`
+-- Đang đổ dữ liệu cho bảng `nguoi_dung`
 --
 
 INSERT INTO `nguoi_dung` (`ma_nguoi_dung`, `ho_ten`, `first_name`, `last_name`, `username`, `email`, `mat_khau`, `so_dien_thoai`, `dia_chi`, `thanh_pho`, `vai_tro`, `thoi_gian_tao`) VALUES
@@ -307,7 +304,7 @@ INSERT INTO `nguoi_dung` (`ma_nguoi_dung`, `ho_ten`, `first_name`, `last_name`, 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `nhan_vien`
+-- Cấu trúc bảng cho bảng `nhan_vien`
 --
 
 DROP TABLE IF EXISTS `nhan_vien`;
@@ -325,7 +322,7 @@ CREATE TABLE IF NOT EXISTS `nhan_vien` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `phuong`
+-- Cấu trúc bảng cho bảng `phuong`
 --
 
 DROP TABLE IF EXISTS `phuong`;
@@ -338,7 +335,7 @@ CREATE TABLE IF NOT EXISTS `phuong` (
 ) ENGINE=InnoDB AUTO_INCREMENT=26 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
--- Dumping data for table `phuong`
+-- Đang đổ dữ liệu cho bảng `phuong`
 --
 
 INSERT INTO `phuong` (`ma_phuong`, `ten_phuong`, `ma_thanhpho`) VALUES
@@ -371,7 +368,7 @@ INSERT INTO `phuong` (`ma_phuong`, `ten_phuong`, `ma_thanhpho`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `san_pham`
+-- Cấu trúc bảng cho bảng `san_pham`
 --
 
 DROP TABLE IF EXISTS `san_pham`;
@@ -383,25 +380,26 @@ CREATE TABLE IF NOT EXISTS `san_pham` (
   `gia` decimal(10,2) NOT NULL,
   `mo_ta` text,
   `hinh_anh_url` varchar(255) DEFAULT NULL,
+  `trang_thai_san_pham` int NOT NULL DEFAULT '1',
   `thoi_gian_tao` datetime DEFAULT CURRENT_TIMESTAMP,
   `thoi_gian_cap_nhat` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`ma_san_pham`),
   KEY `ma_danh_muc` (`ma_danh_muc`),
   KEY `ma_loai` (`ma_loai`)
-) ENGINE=InnoDB AUTO_INCREMENT=30 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=31 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
--- Dumping data for table `san_pham`
+-- Đang đổ dữ liệu cho bảng `san_pham`
 --
 
-INSERT INTO `san_pham` (`ma_san_pham`, `ma_loai`, `ma_danh_muc`, `ten_san_pham`, `gia`, `mo_ta`, `hinh_anh_url`, `thoi_gian_tao`, `thoi_gian_cap_nhat`) VALUES
-(27, 1, 1, 'Len Cotton Milk Premium', 45000.00, '', NULL, '2025-12-03 21:04:37', '2025-12-03 21:04:37'),
-(28, 1, 1, 'Len Wool Premium', 50000.00, '', NULL, '2025-12-06 13:33:06', '2025-12-06 13:33:06');
+INSERT INTO `san_pham` (`ma_san_pham`, `ma_loai`, `ma_danh_muc`, `ten_san_pham`, `gia`, `mo_ta`, `hinh_anh_url`, `trang_thai_san_pham`, `thoi_gian_tao`, `thoi_gian_cap_nhat`) VALUES
+(27, 1, 1, 'Len Cotton Milk Premium', 45000.00, '', NULL, 1, '2025-12-03 21:04:37', '2026-01-01 21:59:19'),
+(28, 1, 1, 'Len Wool Premium', 50000.00, '', NULL, 1, '2025-12-06 13:33:06', '2026-01-01 21:59:21');
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `san_pham_khuyen_mai`
+-- Cấu trúc bảng cho bảng `san_pham_khuyen_mai`
 --
 
 DROP TABLE IF EXISTS `san_pham_khuyen_mai`;
@@ -418,7 +416,7 @@ CREATE TABLE IF NOT EXISTS `san_pham_khuyen_mai` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `thanhpho`
+-- Cấu trúc bảng cho bảng `thanhpho`
 --
 
 DROP TABLE IF EXISTS `thanhpho`;
@@ -429,7 +427,7 @@ CREATE TABLE IF NOT EXISTS `thanhpho` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
--- Dumping data for table `thanhpho`
+-- Đang đổ dữ liệu cho bảng `thanhpho`
 --
 
 INSERT INTO `thanhpho` (`ma_thanhpho`, `ten_thanhpho`) VALUES
@@ -442,7 +440,7 @@ INSERT INTO `thanhpho` (`ma_thanhpho`, `ten_thanhpho`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `thanh_toan`
+-- Cấu trúc bảng cho bảng `thanh_toan`
 --
 
 DROP TABLE IF EXISTS `thanh_toan`;
@@ -457,14 +455,10 @@ CREATE TABLE IF NOT EXISTS `thanh_toan` (
   UNIQUE KEY `uq_thanh_toan_don_hang` (`ma_don_hang`)
 ) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
---
--- Dumping data for table `thanh_toan`
---
-
 -- --------------------------------------------------------
 
 --
--- Table structure for table `ton_kho`
+-- Cấu trúc bảng cho bảng `ton_kho`
 --
 
 DROP TABLE IF EXISTS `ton_kho`;
@@ -478,22 +472,22 @@ CREATE TABLE IF NOT EXISTS `ton_kho` (
   KEY `ma_kho` (`ma_kho`),
   KEY `ma_san_pham` (`ma_san_pham`),
   KEY `ma_bien_the` (`ma_bien_the`)
-) ENGINE=InnoDB AUTO_INCREMENT=33 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=38 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
--- Dumping data for table `ton_kho`
+-- Đang đổ dữ liệu cho bảng `ton_kho`
 --
 
 INSERT INTO `ton_kho` (`ma_ton`, `ma_kho`, `ma_san_pham`, `ma_bien_the`, `so_luong_ton`) VALUES
 (22, 1, 28, 47, 999),
 (23, 1, 28, 48, 999),
-(28, 1, 27, 53, 999),
-(29, 1, 27, 54, 999);
+(35, 1, 27, 60, 999),
+(36, 1, 27, 61, 999);
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `workshop`
+-- Cấu trúc bảng cho bảng `workshop`
 --
 
 DROP TABLE IF EXISTS `workshop`;
@@ -510,17 +504,17 @@ CREATE TABLE IF NOT EXISTS `workshop` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
--- Constraints for dumped tables
+-- Các ràng buộc cho các bảng đã đổ
 --
 
 --
--- Constraints for table `bien_the_san_pham`
+-- Các ràng buộc cho bảng `bien_the_san_pham`
 --
 ALTER TABLE `bien_the_san_pham`
   ADD CONSTRAINT `bien_the_san_pham_ibfk_1` FOREIGN KEY (`ma_san_pham`) REFERENCES `san_pham` (`ma_san_pham`);
 
 --
--- Constraints for table `chi_tiet_don_hang`
+-- Các ràng buộc cho bảng `chi_tiet_don_hang`
 --
 ALTER TABLE `chi_tiet_don_hang`
   ADD CONSTRAINT `chi_tiet_don_hang_ibfk_1` FOREIGN KEY (`ma_don_hang`) REFERENCES `don_hang` (`ma_don_hang`),
@@ -528,7 +522,7 @@ ALTER TABLE `chi_tiet_don_hang`
   ADD CONSTRAINT `chi_tiet_don_hang_ibfk_3` FOREIGN KEY (`ma_bien_the`) REFERENCES `bien_the_san_pham` (`ma_bien_the`);
 
 --
--- Constraints for table `don_hang`
+-- Các ràng buộc cho bảng `don_hang`
 --
 ALTER TABLE `don_hang`
   ADD CONSTRAINT `don_hang_ibfk_1` FOREIGN KEY (`ma_nguoi_dung`) REFERENCES `nguoi_dung` (`ma_nguoi_dung`),
@@ -536,7 +530,7 @@ ALTER TABLE `don_hang`
   ADD CONSTRAINT `don_hang_ibfk_4` FOREIGN KEY (`ma_phuong`) REFERENCES `phuong` (`ma_phuong`);
 
 --
--- Constraints for table `gio_hang`
+-- Các ràng buộc cho bảng `gio_hang`
 --
 ALTER TABLE `gio_hang`
   ADD CONSTRAINT `gio_hang_fk_variant` FOREIGN KEY (`ma_bien_the`) REFERENCES `bien_the_san_pham` (`ma_bien_the`) ON DELETE SET NULL,
@@ -544,51 +538,51 @@ ALTER TABLE `gio_hang`
   ADD CONSTRAINT `gio_hang_ibfk_2` FOREIGN KEY (`ma_san_pham`) REFERENCES `san_pham` (`ma_san_pham`);
 
 --
--- Constraints for table `hinh_anh_bien_the`
+-- Các ràng buộc cho bảng `hinh_anh_bien_the`
 --
 ALTER TABLE `hinh_anh_bien_the`
   ADD CONSTRAINT `hinh_anh_bien_the_ibfk_1` FOREIGN KEY (`ma_bien_the`) REFERENCES `bien_the_san_pham` (`ma_bien_the`) ON DELETE CASCADE;
 
 --
--- Constraints for table `hinh_anh_san_pham`
+-- Các ràng buộc cho bảng `hinh_anh_san_pham`
 --
 ALTER TABLE `hinh_anh_san_pham`
   ADD CONSTRAINT `hinh_anh_san_pham_ibfk_1` FOREIGN KEY (`ma_san_pham`) REFERENCES `san_pham` (`ma_san_pham`) ON DELETE CASCADE;
 
 --
--- Constraints for table `nhan_vien`
+-- Các ràng buộc cho bảng `nhan_vien`
 --
 ALTER TABLE `nhan_vien`
   ADD CONSTRAINT `nhan_vien_ibfk_1` FOREIGN KEY (`ma_nguoi_dung`) REFERENCES `nguoi_dung` (`ma_nguoi_dung`);
 
 --
--- Constraints for table `phuong`
+-- Các ràng buộc cho bảng `phuong`
 --
 ALTER TABLE `phuong`
   ADD CONSTRAINT `phuong_ibfk_thanhpho` FOREIGN KEY (`ma_thanhpho`) REFERENCES `thanhpho` (`ma_thanhpho`);
 
 --
--- Constraints for table `san_pham`
+-- Các ràng buộc cho bảng `san_pham`
 --
 ALTER TABLE `san_pham`
   ADD CONSTRAINT `san_pham_ibfk_1` FOREIGN KEY (`ma_danh_muc`) REFERENCES `danh_muc` (`ma_danh_muc`),
   ADD CONSTRAINT `san_pham_ibfk_2` FOREIGN KEY (`ma_loai`) REFERENCES `loai_san_pham` (`ma_loai`);
 
 --
--- Constraints for table `san_pham_khuyen_mai`
+-- Các ràng buộc cho bảng `san_pham_khuyen_mai`
 --
 ALTER TABLE `san_pham_khuyen_mai`
   ADD CONSTRAINT `san_pham_khuyen_mai_ibfk_1` FOREIGN KEY (`ma_san_pham`) REFERENCES `san_pham` (`ma_san_pham`),
   ADD CONSTRAINT `san_pham_khuyen_mai_ibfk_2` FOREIGN KEY (`ma_khuyen_mai`) REFERENCES `khuyen_mai` (`ma_khuyen_mai`);
 
 --
--- Constraints for table `thanh_toan`
+-- Các ràng buộc cho bảng `thanh_toan`
 --
 ALTER TABLE `thanh_toan`
   ADD CONSTRAINT `thanh_toan_ibfk_1` FOREIGN KEY (`ma_don_hang`) REFERENCES `don_hang` (`ma_don_hang`) ON DELETE CASCADE;
 
 --
--- Constraints for table `ton_kho`
+-- Các ràng buộc cho bảng `ton_kho`
 --
 ALTER TABLE `ton_kho`
   ADD CONSTRAINT `ton_kho_ibfk_1` FOREIGN KEY (`ma_kho`) REFERENCES `kho` (`ma_kho`),
@@ -596,7 +590,7 @@ ALTER TABLE `ton_kho`
   ADD CONSTRAINT `ton_kho_ibfk_3` FOREIGN KEY (`ma_bien_the`) REFERENCES `bien_the_san_pham` (`ma_bien_the`);
 
 --
--- Constraints for table `workshop`
+-- Các ràng buộc cho bảng `workshop`
 --
 ALTER TABLE `workshop`
   ADD CONSTRAINT `workshop_ibfk_1` FOREIGN KEY (`ma_san_pham`) REFERENCES `san_pham` (`ma_san_pham`);
