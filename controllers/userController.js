@@ -21,7 +21,7 @@ function mapUserRow(row) {
 	};
 }
 
-//Lấy danh sách tài khoản
+// Lấy danh sách tài khoản
 async function listUsers(req, res) {
 	try {
 		if (!isAdmin(req)) {
@@ -48,7 +48,7 @@ async function listUsers(req, res) {
 	}
 }
 
-//Thêm tài khoản
+// Thêm tài khoản
 async function createUser(req, res) {
 	try {
 		if (!isAdmin(req)) {
@@ -75,7 +75,7 @@ async function createUser(req, res) {
 	}
 }
 
-//Cập nhật tài khoản
+// Cập nhật tài khoản
 async function updateUser(req, res) {
 	try {
 		if (!isAdmin(req)) {
@@ -123,7 +123,7 @@ async function updateUser(req, res) {
 	}
 }
 
-//Xóa tài khoản
+// Xóa tài khoản
 async function deleteUser(req, res) {
 	try {
 		if (!isAdmin(req)) {

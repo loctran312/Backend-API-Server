@@ -120,7 +120,7 @@ const register = async (req, res) => {
 
   } catch (error) {
     console.error('Lỗi đăng ký:', error);
-        // Xử lý lỗi duplicate entry (MySQL error 1062)
+        // Xử lý lỗi duplicate entry
     if (error.code === 'ER_DUP_ENTRY') {
       if (error.sqlMessage.includes('username')) {
         return res.status(400).json({

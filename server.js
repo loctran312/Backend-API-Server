@@ -81,24 +81,4 @@ app.use((err, req, res, next) => {
   });
 });
 
-// ===== START SERVER =====
-app.listen(PORT, () => {
-  console.log(`🚀 Server đang chạy tại http://localhost:${PORT}`);
-  console.log(`📡 API endpoints:`);
-  console.log(`   - POST /auth/register`);
-  console.log(`   - POST /auth/login`);
-  console.log(`   - GET  /products`);
-  console.log(`   - GET  /products/:id`);
-  console.log(`   - POST /products (admin)`);
-  console.log(`   - PUT  /products/:id (admin)`);
-  console.log(`   - DELETE /products/:id (admin)`);
-  console.log(`   - GET  /users (admin)`);
-  console.log(`   - POST /users (admin)`);
-  console.log(`   - PUT  /users/:id (admin)`);
-  console.log(`   - DELETE /users/:id (admin)`);
-  console.log(`   - POST /api/payment/momo`);
-  console.log(`   - POST /api/payment/momo/ipn`);
-  console.log(`   - GET  /health`);
-});
-
 module.exports = app;
