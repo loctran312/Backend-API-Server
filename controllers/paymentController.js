@@ -13,17 +13,17 @@ exports.createPayment = async (req, res) => {
             });
         }
         
-        const partnerCode = "MOMO";
-        const accessKey = "F8BBA842ECF85";
-        const secretkey = "K951B6PE1waDMi640xX08PD3vg6EkVlz";
+        const partnerCode = process.env.MOMO_PARTNER_CODE || "MOMO";
+        const accessKey = process.env.MOMO_ACCESS_KEY || "F8BBA842ECF85";
+        const secretkey = process.env.MOMO_SECRET_KEY || "K951B6PE1waDMi640xX08PD3vg6EkVlz";
 
         const requestId = partnerCode + Date.now();
         const momoOrderId = requestId; // MoMo orderId tạm
         const orderInfo = "Thanh toán MoMo UAT";
 
-        const redirectUrl = "http://localhost:5500/ShopLen/index.html";
+        const redirectUrl = process.env.MOMO_REDIRECT_URL || "http://localhost:5500/ShopLen/index.html";
 
-        const ipnUrl = "http://localhost:3000/api/payment/momo/ipn";
+        const ipnUrl = process.env.MOMO_IPN_URL || "http://localhost:3000/api/payment/momo/ipn";
 
         const requestType = "captureWallet";
         const extraData = orderId; // Lưu orderId thật vào extraData

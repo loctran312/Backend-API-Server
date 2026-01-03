@@ -88,7 +88,7 @@ const register = async (req, res) => {
     }
 
     // Mã hóa mật khẩu
-    const saltRounds = 10;
+    const saltRounds = parseInt(process.env.BCRYPT_SALT_ROUNDS) || 10;
     const hashedPassword = await bcrypt.hash(password, saltRounds);
 
     // Thêm người dùng mới vào database
@@ -190,7 +190,7 @@ const login = async (req, res) => {
         role: user.vai_tro
       },
       process.env.JWT_SECRET || 'your-secret-key-change-in-production',
-      { expiresIn: '7d' }
+      { expiresIn: process.env.JWT_EXPIRES_IN || '7d' }
     );
 
     // Trả về thông tin người dùng (không bao gồm mật khẩu)
