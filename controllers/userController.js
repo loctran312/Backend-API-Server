@@ -221,11 +221,76 @@ async function updateCurrentUser(req, res) {
 	}
 }
 
+// Cập nhật mật khẩu người dùng hiện tại
+async function updateUserPassword(req, res) {
+	try {
+		const userId = req.user?.userId;
+		if (!userId) {
+			return res.status(401).json({ status: 'error', message: 'Unauthorized' });
+		}
+
+		const { currentPassword, newPassword } = req.body || {};
+		if (!currentPassword || !newPassword) {
+			return res.status(400).json({ status: 'error', message: 'Thiếu mật khẩu hiện tại hoặc mật khẩu mới' });
+		}
+
+		// Lấy mật khẩu hiện tại
+		const [rows] = await pool.execute(
+			'SELECT mat_khau FROM nguoi_dung WHERE ma_nguoi_dung = ?',
+			[userId]
+		);
+		if (!rows.length) {
+			return res.status(404).json({ status: 'error', message: 'Không tìm thấy người dùng' });
+		}
+
+		const match = await bcrypt.compare(currentPassword, rows[0].mat_khau);
+		if (!match) {
+			return res.status(400).json({ status: 'error', message: 'Mật khẩu hiện tại không đúng' });
+		}
+
+		const saltRounds = parseInt(process.env.BCRYPT_SALT_ROUNDS) || 10;
+		const hashedPassword = await bcrypt.hash(newPassword, saltRounds);
+
+		await pool.execute(
+			'UPDATE nguoi_dung SET mat_khau = ? WHERE ma_nguoi_dung = ?',
+			[hashedPassword, userId]
+		);
+
+		return res.json({ status: 'success', message: 'Đổi mật khẩu thành công' });
+	} catch (err) {
+		console.error('updateUserPassword error:', err);
+		return res.status(500).json({ status: 'error', message: 'Internal server error' });
+	}
+}
+
+async function CountQuantityCart(req, res) 
+{
+	try {
+		const userId = req.user?.userId;
+		if (!userId) return res.status(401).json({ status: 'error', message: 'Unauthorized' });
+		const [rows] = await pool.execute(
+			`SELECT COUNT(ma_gio_hang) AS quantity
+			 FROM gio_hang
+			 WHERE ma_nguoi_dung = ?`,
+			[userId]
+		);
+		const quantity = rows[0].quantity || 0;
+		return res.json({ status: 'success', quantity });
+	} catch (err) {
+		console.error('CountQuantityCart error:', err);
+		return res.status(500).json({ status: 'error', message: 'Internal server error' });
+	}	
+}
+
+
+
 module.exports = {
 	listUsers,
 	createUser,
 	updateUser,
 	deleteUser,
 	getCurrentUser,
-	updateCurrentUser
+	updateCurrentUser,
+	updateUserPassword,
+	CountQuantityCart
 };

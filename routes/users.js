@@ -7,7 +7,9 @@ const {
 	updateUser,
 	deleteUser,
 	getCurrentUser,
-	updateCurrentUser
+	updateCurrentUser,
+	updateUserPassword,
+	CountQuantityCart
 } = require('../controllers/userController');
 
 router.use(verifyToken);
@@ -15,6 +17,8 @@ router.use(verifyToken);
 // profile endpoints (endpoint cho bất kỳ người dùng đã xác thực nào)
 router.get('/me', getCurrentUser);
 router.put('/me', updateCurrentUser);
+router.put('/me/password', updateUserPassword); 
+router.get('/me/cart-quantity', CountQuantityCart);
 
 // admin-only routes (kiểm tra xem người dùng có phải là admin không)
 router.get('/', listUsers);
