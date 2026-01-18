@@ -9,7 +9,9 @@ const {
 	getCurrentUser,
 	updateCurrentUser,
 	updateUserPassword,
-	CountQuantityCart
+	CountQuantityCart,
+	uploadUserAvatar,
+	uploadAvatar
 } = require('../controllers/userController');
 
 router.use(verifyToken);
@@ -17,7 +19,8 @@ router.use(verifyToken);
 // profile endpoints (endpoint cho bất kỳ người dùng đã xác thực nào)
 router.get('/me', getCurrentUser);
 router.put('/me', updateCurrentUser);
-router.put('/me/password', updateUserPassword); 
+router.put('/me/password', updateUserPassword);
+router.post('/me/avatar', uploadAvatar.single('avatar'), uploadUserAvatar);
 router.get('/me/cart-quantity', CountQuantityCart);
 
 // admin-only routes (kiểm tra xem người dùng có phải là admin không)

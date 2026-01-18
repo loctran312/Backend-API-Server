@@ -1,5 +1,41 @@
 const pool = require('../config/database');
 const bcrypt = require('bcrypt');
+const multer = require('multer');
+const path = require('path');
+const fs = require('fs');
+
+// Cấu hình multer để lưu avatar
+const storage = multer.diskStorage({
+	destination: function (req, file, cb) {
+		const uploadDir = path.join(__dirname, '../uploads/avatars');
+		// Tạo thư mục nếu chưa tồn tại
+		if (!fs.existsSync(uploadDir)) {
+			fs.mkdirSync(uploadDir, { recursive: true });
+		}
+		cb(null, uploadDir);
+	},
+	filename: function (req, file, cb) {
+		const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+		cb(null, 'avatar-' + req.user.userId + '-' + uniqueSuffix + path.extname(file.originalname));
+	}
+});
+
+const fileFilter = (req, file, cb) => {
+	// Chỉ chấp nhận file ảnh
+	if (file.mimetype.startsWith('image/')) {
+		cb(null, true);
+	} else {
+		cb(new Error('Chỉ chấp nhận file ảnh!'), false);
+	}
+};
+
+const uploadAvatar = multer({
+	storage: storage,
+	fileFilter: fileFilter,
+	limits: {
+		fileSize: 5 * 1024 * 1024 // Giới hạn 5MB
+	}
+});
 
 function isAdmin(req) {
 	return req.user && (req.user.role === 'admin');
@@ -17,6 +53,7 @@ function mapUserRow(row) {
 		address: row.dia_chi || '',
 		city: row.thanh_pho || '',
 		role: row.role || 'khach_hang',
+		avatarUrl: row.url_hinh_dai_dien || '',
 		createdAt: row.createdAt
 	};
 }
@@ -155,6 +192,7 @@ async function getCurrentUser(req, res) {
 			        dia_chi,
 			        thanh_pho,
 			        vai_tro AS role,
+			        url_hinh_dai_dien,
 			        thoi_gian_tao AS createdAt
 			 FROM nguoi_dung
 			 WHERE ma_nguoi_dung = ?`,
@@ -282,6 +320,65 @@ async function CountQuantityCart(req, res)
 	}	
 }
 
+// Upload avatar
+async function uploadUserAvatar(req, res) {
+	try {
+		const userId = req.user?.userId;
+		if (!userId) {
+			return res.status(401).json({ status: 'error', message: 'Unauthorized' });
+		}
+
+		if (!req.file) {
+			return res.status(400).json({ status: 'error', message: 'Không có file được tải lên' });
+		}
+
+		// Lấy avatar cũ từ database
+		const [rows] = await pool.execute(
+			'SELECT url_hinh_dai_dien FROM nguoi_dung WHERE ma_nguoi_dung = ?',
+			[userId]
+		);
+
+		const oldAvatarUrl = rows[0]?.url_hinh_dai_dien;
+
+		// Xóa avatar cũ nếu tồn tại
+		if (oldAvatarUrl) {
+			// Loại bỏ dấu / ở đầu để tạo đường dẫn đúng
+			const relativePath = oldAvatarUrl.replace(/^\//, '');
+			const oldAvatarPath = path.join(__dirname, '..', relativePath);
+			if (fs.existsSync(oldAvatarPath)) {
+				try {
+					fs.unlinkSync(oldAvatarPath);
+					console.log('Đã xóa avatar cũ:', oldAvatarPath);
+				} catch (delErr) {
+					console.error('Lỗi khi xóa avatar cũ:', delErr);
+				}
+			}
+		}
+
+		// Tạo URL cho avatar (đường dẫn tương đối)
+		const avatarUrl = `/uploads/avatars/${req.file.filename}`;
+
+		// Cập nhật avatar URL vào database
+		await pool.execute(
+			'UPDATE nguoi_dung SET url_hinh_dai_dien = ? WHERE ma_nguoi_dung = ?',
+			[avatarUrl, userId]
+		);
+
+		return res.json({
+			status: 'success',
+			message: 'Upload avatar thành công',
+			avatarUrl: avatarUrl
+		});
+	} catch (err) {
+		console.error('uploadUserAvatar error:', err);
+		// Xóa file đã upload nếu có lỗi
+		if (req.file) {
+			fs.unlinkSync(req.file.path);
+		}
+		return res.status(500).json({ status: 'error', message: 'Internal server error' });
+	}
+}
+
 
 
 module.exports = {
@@ -292,5 +389,7 @@ module.exports = {
 	getCurrentUser,
 	updateCurrentUser,
 	updateUserPassword,
-	CountQuantityCart
+	CountQuantityCart,
+	uploadUserAvatar,
+	uploadAvatar
 };

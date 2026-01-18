@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Máy chủ: 127.0.0.1:3306
--- Thời gian đã tạo: Th1 01, 2026 lúc 03:05 PM
+-- Thời gian đã tạo: Th1 18, 2026 lúc 05:12 AM
 -- Phiên bản máy phục vụ: 9.1.0
 -- Phiên bản PHP: 8.3.14
 
@@ -38,7 +38,7 @@ CREATE TABLE IF NOT EXISTS `bien_the_san_pham` (
   `gia_them` decimal(10,2) DEFAULT '0.00',
   PRIMARY KEY (`ma_bien_the`),
   KEY `ma_san_pham` (`ma_san_pham`)
-) ENGINE=InnoDB AUTO_INCREMENT=63 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=66 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Đang đổ dữ liệu cho bảng `bien_the_san_pham`
@@ -68,7 +68,14 @@ CREATE TABLE IF NOT EXISTS `chi_tiet_don_hang` (
   KEY `ma_don_hang` (`ma_don_hang`),
   KEY `ma_san_pham` (`ma_san_pham`),
   KEY `ma_bien_the` (`ma_bien_the`)
-) ENGINE=InnoDB AUTO_INCREMENT=29 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=30 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Đang đổ dữ liệu cho bảng `chi_tiet_don_hang`
+--
+
+INSERT INTO `chi_tiet_don_hang` (`ma_chi_tiet`, `ma_don_hang`, `ma_san_pham`, `ma_bien_the`, `so_luong`, `gia`) VALUES
+(29, 'HN-09012026-000001', 27, 60, 1, 49000.00);
 
 -- --------------------------------------------------------
 
@@ -136,6 +143,13 @@ CREATE TABLE IF NOT EXISTS `don_hang` (
   KEY `ma_phuong` (`ma_phuong`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
+--
+-- Đang đổ dữ liệu cho bảng `don_hang`
+--
+
+INSERT INTO `don_hang` (`ma_don_hang`, `ma_nguoi_dung`, `ngay_dat_hang`, `trang_thai`, `tong_tien`, `ghi_chu`, `ma_thanhpho`, `ma_phuong`, `dia_chi_giao_hang`, `thoi_gian_cap_nhat`) VALUES
+('HN-09012026-000001', 2, '2026-01-09 17:28:42', 'da_huy', 49000.00, '', 'HN', 9, '180 Cao Lỗ, Cầu Giấy, Hà Nội', '2026-01-17 08:46:16');
+
 -- --------------------------------------------------------
 
 --
@@ -153,16 +167,7 @@ CREATE TABLE IF NOT EXISTS `gio_hang` (
   KEY `ma_nguoi_dung` (`ma_nguoi_dung`),
   KEY `ma_san_pham` (`ma_san_pham`),
   KEY `gio_hang_fk_variant` (`ma_bien_the`)
-) ENGINE=InnoDB AUTO_INCREMENT=43 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-
---
--- Đang đổ dữ liệu cho bảng `gio_hang`
---
-
-INSERT INTO `gio_hang` (`ma_gio_hang`, `ma_nguoi_dung`, `ma_san_pham`, `ma_bien_the`, `so_luong`) VALUES
-(40, 1, NULL, NULL, 2),
-(41, 1, NULL, 47, 3),
-(42, 1, NULL, NULL, 1);
+) ENGINE=InnoDB AUTO_INCREMENT=58 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
 
@@ -178,7 +183,7 @@ CREATE TABLE IF NOT EXISTS `hinh_anh_bien_the` (
   `thu_tu` int DEFAULT '0',
   PRIMARY KEY (`ma_hinh_anh`),
   KEY `ma_bien_the` (`ma_bien_the`)
-) ENGINE=InnoDB AUTO_INCREMENT=73 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=76 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Đang đổ dữ liệu cho bảng `hinh_anh_bien_the`
@@ -287,6 +292,7 @@ CREATE TABLE IF NOT EXISTS `nguoi_dung` (
   `dia_chi` varchar(255) DEFAULT NULL,
   `thanh_pho` varchar(100) DEFAULT NULL,
   `vai_tro` enum('admin','khach_hang','nhan_vien') DEFAULT 'khach_hang',
+  `url_hinh_dai_dien` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `thoi_gian_tao` datetime DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`ma_nguoi_dung`),
   UNIQUE KEY `username` (`username`),
@@ -297,9 +303,9 @@ CREATE TABLE IF NOT EXISTS `nguoi_dung` (
 -- Đang đổ dữ liệu cho bảng `nguoi_dung`
 --
 
-INSERT INTO `nguoi_dung` (`ma_nguoi_dung`, `ho_ten`, `first_name`, `last_name`, `username`, `email`, `mat_khau`, `so_dien_thoai`, `dia_chi`, `thanh_pho`, `vai_tro`, `thoi_gian_tao`) VALUES
-(1, 'admin', 'Ếch', 'Con', 'admin', 'admin@gmail.com', '$2b$10$Pxj8Jfy562HgWoVkWN3jZ.kWxVSSqWIJu97LgOIwdMsSaxO8GZa2K', '0987654321', '181 Cao Lỗ', 'TP HCM', 'admin', '2025-11-03 16:09:47'),
-(2, 'Ếch Con', 'Ếch', 'Con', 'user1', 'user1@gmail.com', '$2b$10$XARtrRSHRGaEjZAr28.wL.DIyOFL3..caI3xAIVQQu7lYtfKuImE6', '0123456789', '180 Cao Lỗ', 'HCM', 'khach_hang', '2025-11-19 10:58:31');
+INSERT INTO `nguoi_dung` (`ma_nguoi_dung`, `ho_ten`, `first_name`, `last_name`, `username`, `email`, `mat_khau`, `so_dien_thoai`, `dia_chi`, `thanh_pho`, `vai_tro`, `url_hinh_dai_dien`, `thoi_gian_tao`) VALUES
+(1, 'admin', 'Ếch', 'Con', 'admin', 'admin@gmail.com', '$2b$10$Pxj8Jfy562HgWoVkWN3jZ.kWxVSSqWIJu97LgOIwdMsSaxO8GZa2K', '0987654321', '181 Cao Lỗ', 'TP HCM', 'admin', NULL, '2025-11-03 16:09:47'),
+(2, 'Ếch Con', 'Ếch', 'Con', 'user1', 'user1@gmail.com', '$2b$10$TxzIR9R7AZFCyuUE36gtkuCJ9naiNgUGWtTB9DVM6lZRbZugucPk6', '0123456789', '180 Cao Lỗ', 'HCM', 'khach_hang', '/uploads/avatars/avatar-2-1768713014372-637514552.jpg', '2025-11-19 10:58:31');
 
 -- --------------------------------------------------------
 
@@ -386,7 +392,7 @@ CREATE TABLE IF NOT EXISTS `san_pham` (
   PRIMARY KEY (`ma_san_pham`),
   KEY `ma_danh_muc` (`ma_danh_muc`),
   KEY `ma_loai` (`ma_loai`)
-) ENGINE=InnoDB AUTO_INCREMENT=31 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=34 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Đang đổ dữ liệu cho bảng `san_pham`
@@ -394,7 +400,7 @@ CREATE TABLE IF NOT EXISTS `san_pham` (
 
 INSERT INTO `san_pham` (`ma_san_pham`, `ma_loai`, `ma_danh_muc`, `ten_san_pham`, `gia`, `mo_ta`, `hinh_anh_url`, `trang_thai_san_pham`, `thoi_gian_tao`, `thoi_gian_cap_nhat`) VALUES
 (27, 1, 1, 'Len Cotton Milk Premium', 45000.00, '', NULL, 1, '2025-12-03 21:04:37', '2026-01-01 21:59:19'),
-(28, 1, 1, 'Len Wool Premium', 50000.00, '', NULL, 1, '2025-12-06 13:33:06', '2026-01-01 21:59:21');
+(28, 1, 1, 'Len Wool Premium', 50000.00, '', NULL, 1, '2025-12-06 13:33:06', '2026-01-03 21:00:36');
 
 -- --------------------------------------------------------
 
@@ -453,7 +459,14 @@ CREATE TABLE IF NOT EXISTS `thanh_toan` (
   `thoi_gian_tao` datetime DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`ma_thanh_toan`),
   UNIQUE KEY `uq_thanh_toan_don_hang` (`ma_don_hang`)
-) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Đang đổ dữ liệu cho bảng `thanh_toan`
+--
+
+INSERT INTO `thanh_toan` (`ma_thanh_toan`, `ma_don_hang`, `phuong_thuc_thanh_toan`, `trang_thai_thanh_toan`, `ma_tham_chieu`, `thoi_gian_tao`) VALUES
+(21, 'HN-09012026-000001', 'COD', 'chua_thanh_toan', '', '2026-01-09 17:28:42');
 
 -- --------------------------------------------------------
 
@@ -472,7 +485,7 @@ CREATE TABLE IF NOT EXISTS `ton_kho` (
   KEY `ma_kho` (`ma_kho`),
   KEY `ma_san_pham` (`ma_san_pham`),
   KEY `ma_bien_the` (`ma_bien_the`)
-) ENGINE=InnoDB AUTO_INCREMENT=38 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=41 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Đang đổ dữ liệu cho bảng `ton_kho`
@@ -481,7 +494,7 @@ CREATE TABLE IF NOT EXISTS `ton_kho` (
 INSERT INTO `ton_kho` (`ma_ton`, `ma_kho`, `ma_san_pham`, `ma_bien_the`, `so_luong_ton`) VALUES
 (22, 1, 28, 47, 999),
 (23, 1, 28, 48, 999),
-(35, 1, 27, 60, 999),
+(35, 1, 27, 60, 998),
 (36, 1, 27, 61, 999);
 
 -- --------------------------------------------------------
