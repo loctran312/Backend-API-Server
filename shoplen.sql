@@ -279,7 +279,6 @@ INSERT INTO `loai_san_pham` (`ma_loai`, `ten_loai`, `mo_ta`) VALUES
 -- Cấu trúc bảng cho bảng `nguoi_dung`
 --
 
-DROP TABLE IF EXISTS `nguoi_dung`;
 CREATE TABLE IF NOT EXISTS `nguoi_dung` (
   `ma_nguoi_dung` int NOT NULL AUTO_INCREMENT,
   `ho_ten` varchar(100) NOT NULL,
@@ -293,6 +292,7 @@ CREATE TABLE IF NOT EXISTS `nguoi_dung` (
   `thanh_pho` varchar(100) DEFAULT NULL,
   `vai_tro` enum('admin','khach_hang','nhan_vien') DEFAULT 'khach_hang',
   `url_hinh_dai_dien` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `is_online` BOOLEAN DEFAULT FALSE,
   `thoi_gian_tao` datetime DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`ma_nguoi_dung`),
   UNIQUE KEY `username` (`username`),

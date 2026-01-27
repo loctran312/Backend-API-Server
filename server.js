@@ -13,6 +13,7 @@ const cartRoutes = require('./routes/cart');
 const momoRoutes = require('./routes/payment');
 const locationRoutes = require('./routes/locations');
 const orderRoutes = require('./routes/orders');
+const dashboardRoutes = require('./routes/dashboard');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -53,6 +54,7 @@ app.use('/cart', cartRoutes);
 app.use('/api/payment', momoRoutes);
 app.use('/locations', locationRoutes);
 app.use('/orders', orderRoutes);
+app.use('/api/dashboard', dashboardRoutes);
 
 // ===== 404 =====
 app.use((req, res) => {

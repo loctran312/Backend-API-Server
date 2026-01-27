@@ -156,7 +156,6 @@ const login = async (req, res) => {
     }
 
     // Tìm người dùng theo username hoặc email
-    // Có thể đăng nhập bằng username hoặc email
     const [users] = await pool.execute(
       'SELECT * FROM nguoi_dung WHERE username = ? OR email = ?',
       [username.trim(), username.trim()]
@@ -167,7 +166,7 @@ const login = async (req, res) => {
         status: 'error',
         message: 'Username hoặc mật khẩu không đúng'
       });
-    }
+    } 
 
     const user = users[0];
 
@@ -180,6 +179,12 @@ const login = async (req, res) => {
         message: 'Email hoặc mật khẩu không đúng'
       });
     }
+
+    // Cập nhật trạng thái is_online = true khi login
+    await pool.execute(
+      'UPDATE nguoi_dung SET is_online = TRUE WHERE ma_nguoi_dung = ?',
+      [user.ma_nguoi_dung]
+    );
 
     // Tạo JWT token
     const token = jwt.sign(
@@ -282,13 +287,38 @@ const getProfile = async (req, res) => {
       message: 'Lỗi server khi lấy thông tin người dùng'
     });
   }
-}
+};
+
+// Đăng xuất người dùng
+const logout = async (req, res) => {
+  try {
+    const userId = req.user.userId; // Lấy từ token đã verify
+
+    // Cập nhật trạng thái is_online = false khi logout
+    await pool.execute(
+      'UPDATE nguoi_dung SET is_online = FALSE WHERE ma_nguoi_dung = ?',
+      [userId]
+    );
+
+    res.json({
+      status: 'success',
+      message: 'Đăng xuất thành công'
+    });
+  } catch (error) {
+    console.error('Lỗi đăng xuất:', error);
+    res.status(500).json({
+      status: 'error',
+      message: 'Lỗi server khi đăng xuất'
+    });
+  }
+};
 
 
 
 module.exports = {
   register,
   login,
+  logout,
   verifyToken,
   getProfile
 };
