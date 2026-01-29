@@ -339,7 +339,7 @@ async function createProduct(req, res) {
 			}
 		});
 		// Lấy hình ảnh đầu tiên làm hình chính (backward compatibility)
-		const mainImagePath = productImages.length > 0 ? `/uploads/${productImages[0].filename}` : (productImageUrls.length > 0 ? productImageUrls[0] : null);
+		const mainImagePath = productImages.length > 0 ? `${process.env.FILE_BASE_URL}/uploads/${productImages[0].filename}` : (productImageUrls.length > 0 ? productImageUrls[0] : null);
 
 		// Tìm ma_loai từ productType (ten_loai)
 		let maLoai = null;
@@ -398,11 +398,10 @@ async function createProduct(req, res) {
 						const variantFiles = variantImagesMap[i] || [];
 						// Lấy file đầu tiên làm hình chính, hoặc URL đầu tiên
 						const firstFile = variantFiles.find(f => f);
-						const variantImagePath = firstFile ? `/uploads/${firstFile.filename}` : (variant.imageUrls && variant.imageUrls.length > 0 ? variant.imageUrls[0] : null);
+						const variantImagePath = firstFile ? `${process.env.FILE_BASE_URL}/uploads/${firstFile.filename}` : (variant.imageUrls && variant.imageUrls.length > 0 ? variant.imageUrls[0] : null);
 						
 						// Nếu không có hình ảnh, bỏ qua biến thể này
 						if (!variantImagePath) {
-							console.warn(`Biến thể ${i} không có hình ảnh, bỏ qua`);
 							continue;
 						}
 
@@ -442,7 +441,7 @@ async function createProduct(req, res) {
 							let imageOrder = 0;
 							variantFiles.forEach((file, fileIdx) => {
 								if (file) {
-									const imagePath = `/uploads/${file.filename}`;
+									const imagePath = `${process.env.FILE_BASE_URL}/uploads/${file.filename}`;
 									pool.execute(
 										'INSERT INTO hinh_anh_bien_the (ma_bien_the, url_hinh_anh, thu_tu) VALUES (?, ?, ?)',
 										[variantId, imagePath, imageOrder++]
@@ -544,7 +543,7 @@ async function updateProduct(req, res) {
 		// Cập nhật hình ảnh chính
 		let imagePath = current.hinh_anh_url;
 		if (productImages.length > 0) {
-			imagePath = `/uploads/${productImages[0].filename}`;
+			imagePath = `${process.env.FILE_BASE_URL}/uploads/${productImages[0].filename}`;
 		} else if (productImageUrls.length > 0) {
 			imagePath = productImageUrls[0];
 		}
@@ -606,7 +605,7 @@ async function updateProduct(req, res) {
 					
 					// Xóa file ảnh cũ
 					oldVariantImages.forEach(img => {
-						if (img.url_hinh_anh && img.url_hinh_anh.startsWith('/uploads/')) {
+						if (img.url_hinh_anh && img.url_hinh_anh.startsWith(`${process.env.FILE_BASE_URL}/uploads/`)) {
 							const filePath = path.join(__dirname, '..', img.url_hinh_anh);
 							// fs.unlink(filePath, () => {});
 						}
@@ -616,7 +615,7 @@ async function updateProduct(req, res) {
 				}
 				
 				// Xóa file ảnh chính của biến thể
-				if (oldVariant.url_hinh_anh_bien_the && oldVariant.url_hinh_anh_bien_the.startsWith('/uploads/')) {
+				if (oldVariant.url_hinh_anh_bien_the && oldVariant.url_hinh_anh_bien_the.startsWith(`${process.env.FILE_BASE_URL}/uploads/`)) {
 					const oldPath = path.join(__dirname, '..', oldVariant.url_hinh_anh_bien_the);
 					// fs.unlink(oldPath, () => {});
 				}
@@ -640,11 +639,10 @@ async function updateProduct(req, res) {
 					const variantFiles = variantImagesMap[i] || [];
 					// Lấy file đầu tiên làm hình chính, hoặc URL đầu tiên
 					const firstFile = variantFiles.find(f => f);
-					const variantImagePath = firstFile ? `/uploads/${firstFile.filename}` : (variant.imageUrls && variant.imageUrls.length > 0 ? variant.imageUrls[0] : null);
+					const variantImagePath = firstFile ? `${process.env.FILE_BASE_URL}/uploads/${firstFile.filename}` : (variant.imageUrls && variant.imageUrls.length > 0 ? variant.imageUrls[0] : null);
 					
 					// Nếu không có hình ảnh, bỏ qua biến thể này
 					if (!variantImagePath) {
-						console.warn(`Biến thể ${i} không có hình ảnh, bỏ qua`);
 						continue;
 					}
 
@@ -684,7 +682,7 @@ async function updateProduct(req, res) {
 						let imageOrder = 0;
 						variantFiles.forEach((file, fileIdx) => {
 							if (file) {
-								const imagePath = `/uploads/${file.filename}`;
+								const imagePath = `${process.env.FILE_BASE_URL}/uploads/${file.filename}`;
 								pool.execute(
 									'INSERT INTO hinh_anh_bien_the (ma_bien_the, url_hinh_anh, thu_tu) VALUES (?, ?, ?)',
 									[variantId, imagePath, imageOrder++]
@@ -744,7 +742,7 @@ async function deleteProduct(req, res) {
 				
 				// Xóa file ảnh biến thể
 				variantImages.forEach(img => {
-					if (img.url_hinh_anh && img.url_hinh_anh.startsWith('/uploads/')) {
+					if (img.url_hinh_anh && img.url_hinh_anh.startsWith(`${process.env.FILE_BASE_URL}/uploads/`)) {
 						const filePath = path.join(__dirname, '..', img.url_hinh_anh);
 						fs.unlink(filePath, () => {});
 					}
@@ -754,7 +752,7 @@ async function deleteProduct(req, res) {
 			}
 			
 			// Xóa file ảnh chính của biến thể
-			if (variant.url_hinh_anh_bien_the && variant.url_hinh_anh_bien_the.startsWith('/uploads/')) {
+			if (variant.url_hinh_anh_bien_the && variant.url_hinh_anh_bien_the.startsWith(`${process.env.FILE_BASE_URL}/uploads/`)) {
 				const variantFilePath = path.join(__dirname, '..', variant.url_hinh_anh_bien_the);
 				fs.unlink(variantFilePath, () => {});
 			}
@@ -770,7 +768,7 @@ async function deleteProduct(req, res) {
 		await pool.execute('DELETE FROM san_pham WHERE ma_san_pham = ?', [id]);
 
 		// Xóa file ảnh chính của sản phẩm
-		if (rows[0].hinh_anh_url && rows[0].hinh_anh_url.startsWith('/uploads/')) {
+		if (rows[0].hinh_anh_url && rows[0].hinh_anh_url.startsWith(`${process.env.FILE_BASE_URL}/uploads/`)) {
 			const mainImagePath = path.join(__dirname, '..', rows[0].hinh_anh_url);
 			fs.unlink(mainImagePath, () => {});
 		}
